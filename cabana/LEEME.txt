@@ -1,0 +1,47 @@
+LA CABAÑA · Acústica (2.º GP) · página interactiva de PRUEBA
+================================================================
+Montada por Claude (conversación «La cabaña», octubre de 2026). Esta copia: 06-10-2026 15:41, revisión 10061541.
+
+QUÉ ES
+  prueba.html y esta carpeta, cabana/, son la versión interactiva de «La cabaña»: la historia en tres días de clase (1 · El silencio,
+  2 · Duración, intensidad y altura, 3 · Timbre y síntesis) con paradas para tocar. Son NUEVAS: no cambian index.html (el «Laboratorio
+  de Acústica» que ya estaba publicado) ni ningún otro fichero del sitio.
+  Dirección, cuando esté publicada: https://acustica.gp.lmathome.es/prueba.html
+  Desde Dropbox no se abre con doble clic: necesita estar publicada (o un servidor), porque carga sus ficheros por partes.
+
+CÓMO SE QUITA
+  Borrando prueba.html y la carpeta cabana/ (del repositorio iagonaron/cualidadesdelsonido y de este espejo). Nada más depende de ellas.
+
+QUÉ HAY DENTRO
+  ../prueba.html     la página: lleva dentro el motor, las estaciones, las tipografías y los datos de los tres días
+  manifest.json      lista de ficheros de la versión normal (1080p, 60 fotogramas) · manifest30.json: la ligera (720p, 30 fotogramas)
+  v/     (310 MB)   tramos de la historia (d1_1 … d3_8), esperas en bucle (d1_w1 …) y fondos vivos de las estaciones (f_…, portada)
+  v30/   (191 MB)   lo mismo en la versión ligera (el «30» de la portada, por si el ordenador va a tirones)
+  i/     (14 MB)    imágenes: primer fotograma de cada espera, fondos, la cabaña vacía (8 combinaciones), las radios encendidas
+  a/     (7 MB)     sonidos de las estaciones: ambientes, la flauta parcial a parcial, piano, piano preparado, estática…
+  hls.min.js         hls.js 1.5.20 (licencia Apache 2.0), para las emisoras que emiten en HLS
+  Los ficheros acabados en .p0, .p1… son un vídeo partido en trozos: GitHub no deja subir a mano ficheros de más de 25 MB. La página los une sola.
+
+PARA DAR LA CLASE
+  · Espacio, Intro o la flecha → pulsan el botón que esté en pantalla («Seguir con la historia», «Entendido», «Probar»).
+  · Mayúsculas + → salta al final del tramo que se está viendo; Mayúsculas + ← lo repite desde el principio.
+  · «‹ Salir» (arriba a la izquierda) vuelve a la portada; allí aparece «Continuar el Día N» para retomarlo donde se dejó.
+  · En la portada, abajo a la derecha: 60 / 30. Arriba a la derecha: pantalla completa.
+  · «La cabaña abierta» (portada): todas las paradas sueltas, sin historia, más el repaso con las preguntas tipo test.
+  · El micrófono se pide al empezar los Días 1 y 2 (los veinte segundos, el eco, el sonómetro). Sin micrófono todo sigue, con sonidos de muestra.
+  · Lo que mide la clase (decibelios, hasta dónde oye) se guarda en ese navegador y sale escrito en la libreta.
+  · Si se cambia algo y no se ve, recargar con Cmd + Mayúsculas + R.
+
+LAS DOCE RADIOS (Día 2)
+  Cada radio sintoniza de verdad el dial de FM de A Coruña (frecuencias de guiadelaradio.com, abril de 2026) y suena la emisión por internet
+  de esa emisora en ese momento; entre emisoras, estática. Es directo: no se puede saber qué va a sonar. Si la red filtra las emisoras,
+  la página lo dice y las radios solo dan ruido.
+  88,7 Cadena 100 · 89,2 Onda Cero · 91,0 Los 40 · 91,6 Radio Clásica · 92,1 Radio Galega Música · 92,6 Radio Voz · 93,4 Radio Coruña · Cadena SER · 94,5 Radio 3 · 96,9 COPE · 97,6 Los 40 Classic · 100,4 Radio Nacional · 102,7 esRadio · 103,2 Rock FM · 103,4 CUAC FM · 104,8 Radio Galega · 106,8 Radio Marca
+
+EL PIANO PREPARADO (Día 3) Y LA GRABACIÓN DE CAGE
+  a/cage_frag.mp3 son 18 segundos de la Sonata V de «Sonatas e interludios» (John Cage) y a/cage_00 … cage_12.mp3 son trece notas sueltas
+  recortadas de esa misma grabación, una por tecla. Si hubiera que retirarla: borrar esos catorce ficheros (las teclas se quedan mudas) y
+  avisar a Claude para sustituirlas.
+
+FUENTES (para rehacerla o cambiarla)
+  Dropbox › APPs › LMATHOME GP (github lmpro) › TEORIA INTERACTIVA 2GP (github x8) › _MATERIALES VÍDEOS TEMÁTICOS › ACÚSTICA
