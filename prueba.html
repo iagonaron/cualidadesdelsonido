@@ -7,7 +7,7 @@
 <title>Acústica · La cabaña (prueba)</title>
 <link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="icon" href="favicon.ico">
-<!-- «La cabaña» · Acústica (2.º GP) · página interactiva de PRUEBA. Montada por Claude el 06-10-2026 15:41 (revisión 10061541).
+<!-- «La cabaña» · Acústica (2.º GP) · página interactiva de PRUEBA. Montada por Claude el 07-10-2026 20:09 (revisión 10072009).
      Esta página y la carpeta cabana/ son nuevas: no tocan index.html ni nada de lo que ya había en el sitio. Para quitarla, basta borrar
      prueba.html y la carpeta cabana/. Fuentes y explicación: Dropbox › APPs › LMATHOME GP › TEORIA INTERACTIVA 2GP › CUALIDADES DEL SONIDO. -->
 <style>
@@ -64,6 +64,18 @@ button{font:inherit;color:inherit}
 #bSeguir.on,#bCaja.on{background:rgba(8,12,14,.62);color:#fff;border-color:rgba(255,255,255,.85)}
 #bSeguir.on:hover,#bCaja.on:hover,#bSeguir.on:focus-visible,#bCaja.on:focus-visible{background:rgba(60,66,66,.8);border-color:#fff}
 #bCaja{justify-content:center;font-size:25px;letter-spacing:.3em;padding:0;border-radius:8px;font-weight:400}
+/* (v2) la pausa: el botón (junto al de pantalla completa) solo está mientras corre un tramo; al parar, un velo suave y «Seguir» en el centro */
+#bPausa{top:30px;right:105px;opacity:0;pointer-events:none;transition:opacity .3s linear,background .15s linear,border-color .15s linear}
+#bPausa.hay{opacity:.85;pointer-events:auto}
+#bPausa .iSigue{display:none}
+#bPausa .iSigue path{fill:#fff;stroke:none}
+body.pausa #bPausa .iPara{display:none}
+body.pausa #bPausa .iSigue{display:block}
+#pausa{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:rgba(4,6,7,.36);opacity:0;pointer-events:none;transition:opacity .25s linear;cursor:pointer}
+body.pausa #pausa{opacity:1;pointer-events:auto}
+#pausa p{margin:0;font-weight:300;font-size:20px;letter-spacing:.46em;text-transform:uppercase;opacity:.9;text-shadow:0 0 14px rgba(0,0,0,.7)}
+#pausa .bot{font-size:25px;padding:22px 40px;background:rgba(8,12,14,.66);border-color:rgba(255,255,255,.85)}
+#pausa .bot svg{width:22px;height:22px;fill:#fff}
 #fps{right:30px;bottom:28px;display:flex;align-items:center;gap:7px;font-size:15px;letter-spacing:.2em;color:rgba(255,255,255,.75)}
 #fps button{font-weight:300;letter-spacing:.08em;background:none;border:1px solid rgba(255,255,255,.35);border-radius:6px;color:rgba(255,255,255,.75);width:44px;height:36px;cursor:pointer;padding:0}
 #fps button.on{border-color:#fff;color:#fff;background:rgba(255,255,255,.14)}
@@ -154,6 +166,9 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
 
 /* «Optimizado para ordenador y tablet» (portada) y el aviso al entrar con el móvil */
 #pOpt{position:absolute;left:34px;bottom:36px;margin:0;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:300}
+/* (v2) mientras el navegador no deja sonar la página (hasta el primer clic), la portada lo dice */
+#pSon{position:absolute;left:34px;bottom:68px;margin:0;display:flex;align-items:center;gap:10px;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.82);font-weight:300;text-shadow:0 0 10px rgba(0,0,0,.6)}
+#pSon svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;opacity:.9}
 #movil{position:fixed;inset:0;z-index:999;background:rgba(8,7,6,.9);display:flex;align-items:center;justify-content:center;padding:6vw;font-family:'Jost',system-ui,sans-serif;color:#fff;text-align:center}
 #movil[hidden]{display:none}
 #movil>div{max-width:560px;border:1px solid rgba(255,255,255,.4);border-radius:14px;padding:26px 22px 24px;background:rgba(16,13,11,.96)}
@@ -206,6 +221,17 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
 .bCol:not(.on) b,.bCol:not(.on) span{opacity:.4}
 .bCol.on.suena i{background:var(--ambar)}
 .bCol:hover i{box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+/* (v2) de oboe a clarinete: las doce barras, con la marca de dónde está cada una en el oboe (blanca) y en el clarinete (ámbar), y el camino */
+.tCol i{position:absolute;left:24%;width:52%;bottom:80px;background:#fff;border-radius:2px 2px 0 0}
+.tCol u{position:absolute;left:12%;width:76%;height:0;border-top:2px solid rgba(255,255,255,.75);text-decoration:none}
+.tCol u.cl{border-top-color:var(--ambar)}
+.tCol b{position:absolute;left:0;right:0;bottom:42px;text-align:center;font-weight:300;font-size:22px;letter-spacing:.02em}
+.tCol span{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:14px;opacity:.75;font-variant-numeric:tabular-nums}
+.tLey{display:inline-block;width:26px;border-top:2px solid rgba(255,255,255,.75);vertical-align:middle;margin-right:8px}
+.tLey.cl{border-top-color:var(--ambar)}
+input[type=range].tCam::-webkit-slider-runnable-track{height:3px;background:linear-gradient(to right,#fff,var(--ambar))}
+input[type=range].tCam::-moz-range-track{height:3px;background:linear-gradient(to right,#fff,var(--ambar))}
+input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-13.5px}
 /* serie armónica */
 .sNota{cursor:pointer}.sNota .cab{fill:#fff;transition:fill .12s linear}.sNota.on .cab,.sNota:hover .cab{fill:var(--ambar)}
 /* sintetizador */
@@ -216,6 +242,29 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
 .bot.opc.bien{background:rgba(120,220,150,.28);border-color:var(--verde);opacity:1}
 .bot.opc.mal{background:rgba(255,120,100,.25);border-color:#ff9d8a;opacity:1}
 .rPie .bot{font-size:16px;padding:13px 17px;letter-spacing:.14em;white-space:nowrap}
+
+/* (v2) los dos sonidos de la cámara anecoica, en vivo: el botón de cada uno y, al lado, de dónde venía */
+.dosFila{position:absolute;display:flex;align-items:center;gap:26px;opacity:0;transition:opacity .5s linear}
+.dosQue{font-weight:300;font-size:34px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .5s linear}
+.bot.son{font-size:23px;letter-spacing:.2em;padding:15px 26px 15px 22px;gap:.7em;background:rgba(8,12,14,.6);border-color:rgba(255,255,255,.85)}
+.bot.son::before{content:"";width:13px;height:15px;background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}
+.bot.son.on{background:rgba(255,255,255,.92);color:#161310}
+.bot.son.on::before{background:#161310;width:13px;height:13px;clip-path:none}
+.bot.son.late{animation:late 1.7s ease-out infinite}
+@keyframes late{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%{box-shadow:0 0 0 13px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
+/* (v2) la cabaña vacía: la cuenta atrás antes de grabar y el indicador de que está grabando */
+.cuenta{position:absolute;left:0;right:0;top:214px;height:470px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:none;opacity:0;transition:opacity .2s linear;isolation:isolate}
+.cuenta::before{content:'';position:absolute;left:50%;top:50%;width:1040px;height:600px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(0,0,0,.78),rgba(0,0,0,.6) 50%,rgba(0,0,0,0));z-index:-1}
+.cuenta.on{opacity:1}
+.cuenta .cuNum{font-weight:200;font-size:250px;line-height:1;letter-spacing:.02em;text-shadow:0 0 40px rgba(0,0,0,.75),0 0 6px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
+.cuenta .cuTxt{font-weight:400;font-size:26px;letter-spacing:.3em;text-transform:uppercase;text-shadow:0 0 14px rgba(0,0,0,.9),0 0 3px rgba(0,0,0,.8)}
+.cuenta .cuBarra{width:520px;height:6px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden;opacity:0}
+.cuenta .cuBarra i{display:block;height:100%;width:0;background:#ff5a4a}
+.cuenta.rec .cuNum{width:150px;height:150px;border-radius:50%;background:#ff4a3a;font-size:0;box-shadow:0 0 0 0 rgba(255,74,58,.6);animation:rec 1s ease-out infinite}
+.cuenta.rec .cuTxt{color:#fff}
+.cuenta.rec .cuBarra{opacity:1}
+@keyframes rec{0%{box-shadow:0 0 0 0 rgba(255,74,58,.6)}100%{box-shadow:0 0 0 34px rgba(255,74,58,0)}}
 
 </style>
 </head>
@@ -237,12 +286,15 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       <p><button id="bContinuar" class="discreto" hidden>Continuar donde lo dejamos</button><span id="pSep" hidden>·</span><button id="bLugares" class="discreto">La cabaña abierta: todo lo que se toca</button></p>
     </div>
     <p id="pOpt">Optimizado para ordenador y tablet</p>
+    <p id="pSon" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9l5 6M21 9l-5 6"/></svg>Pulsa en cualquier sitio para oír el valle</p>
   </div>
   <div id="lugares"><button id="lVolver" class="discreto">‹ Volver</button><div class="lCaja"><p class="ceja">La cabaña abierta</p><h2>Todo lo que se toca</h2><div id="lRejilla"></div></div></div>
   <div id="carga"><button id="cVolver" class="discreto">‹ Volver</button><div class="cCaja"><p class="ceja"></p><h2></h2><div class="cBarra"><i></i></div><p class="cTxt"></p><div class="cMicro" hidden><p></p><button id="cMicroSi" class="bot"><span>Permitir el micrófono</span><b>›</b></button><button id="cMicroNo" class="discreto">Seguir sin micrófono</button></div><button id="cEmpezar" class="bot" hidden><span>Empezar</span><b>›</b></button><p class="cSabias"><b>¿Sabías que…?</b><span></span></p></div></div>
+  <div id="pausa"><p>En pausa</p><button type="button" class="bot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5l13 7.5-13 7.5z"/></svg><span>Seguir</span></button></div>
   <div id="mandos">
     <button id="bSalir" class="discreto">‹ Salir</button>
     <button id="bPantalla" class="bot cuadro" title="Pantalla completa" aria-label="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button id="bPausa" class="bot cuadro" title="Pausa (barra espaciadora o un clic en la imagen)" aria-label="Pausa"><svg class="iPara" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14"/></svg><svg class="iSigue" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></button>
     <button id="bSeguir" class="bot"><span>Seguir con la historia</span><b>›</b></button>
     <button id="bCaja" class="bot"><span>Entendido</span></button>
     <div id="fps" role="group" aria-label="Fotogramas por segundo"><span>FPS</span><button type="button" data-fps="60">60</button><button type="button" data-fps="30">30</button></div>
@@ -391,6 +443,13 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
         if (k >= 1) { clearInterval(v._baja); v.volume = 0; v.muted = true; } else v.volume = v0 * (1 - k);
       }, 30);
     }
+    function sube(v, seg) {           // …y al revés: el sonido de un tramo que arranca a medias entra en un instante, sin chasquido
+      clearInterval(v._baja); var t0 = performance.now(); v.volume = 0;
+      v._baja = setInterval(function () {
+        var k = (performance.now() - t0) / 1000 / Math.max(0.05, seg);
+        if (k >= 1) { clearInterval(v._baja); v.volume = 1; } else v.volume = k;
+      }, 30);
+    }
     function alCargar(v) {
       return new Promise(function (ok) {
         if (v.readyState >= 2) return ok();
@@ -503,15 +562,21 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var acabado = new Promise(function (ok) { v.onended = function () { ok(); }; });
       return alCargar(v).then(function () {
         if (n !== pedido) return;
-        if (o.desde) { try { v.currentTime = o.desde; } catch (x) {} }
+        if (o.desde) { try { v.currentTime = o.desde; } catch (x) {} if (!o.mudo) sube(v, 0.3); }
         var p = v.play();
         if (p && p.catch) p.catch(function (e) { if (n !== pedido) return; console.warn('cabaña: el navegador no deja sonar el vídeo todavía', e); v.muted = true; var q = v.play(); if (q && q.catch) q.catch(function () {}); });
         return primerFotograma(v);
       }).then(function () {
         if (n !== pedido) { retira(v, n); res.fin = Promise.resolve(); res.superado = true; return res; }      // llegó otro encargo: este tramo no sube
-        v._pend = 0; actual = { tipo: 'tramo', nombre: nombre, capa: v }; L('tramo ' + nombre);
+        actual = { tipo: 'tramo', nombre: nombre, capa: v }; L('tramo ' + nombre + (o.tapa > 0.02 ? ' (tapado ' + o.tapa + ' s)' : ''));
         if (v.paused && !v.ended) { var q = v.play(); if (q && q.catch) q.catch(function () {}); }                 // por si algo lo paró antes de subir
-        arriba(v, fundido); res.fin = acabado; return res;
+        /* (v2) «tapa»: segundos que el tramo corre todavía DEBAJO de lo que había (el fondo de la estación de la que se vuelve) antes de subir
+           a escena. Así no se llega a ver lo que quedaba apagándose de antes de la parada, y la voz, que ya ha empezado, no se corta. */
+        if (o.tapa > 0.02) {
+          v.style.transition = 'none'; v.style.opacity = 0;
+          setTimeout(function () { if (n !== pedido) { retira(v, n); return; } v._pend = 0; arriba(v, fundido); }, o.tapa * 1000);
+        } else { v._pend = 0; arriba(v, fundido); }
+        res.fin = acabado; return res;
       });
     }
     function imagen(nombre, fundido) {
@@ -540,7 +605,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var AC = window.AudioContext || window.webkitAudioContext; ctx = new AC({ latencyHint: 'interactive' });
       lim = ctx.createDynamicsCompressor(); lim.threshold.value = -8; lim.knee.value = 6; lim.ratio.value = 14; lim.attack.value = 0.003; lim.release.value = 0.2;   // por si la clase se emociona: nada satura
       maestro = ctx.createGain(); maestro.connect(lim); lim.connect(ctx.destination);
-      ['amb', 'est'].forEach(function (n) { bus[n] = ctx.createGain(); bus[n].connect(maestro); });
+      ['cama', 'amb', 'est'].forEach(function (n) { bus[n] = ctx.createGain(); bus[n].connect(maestro); });      // cama: la música y los ambientes continuos (ver Camas)
       var N = 64; CURVA_S = new Float32Array(N); CURVA_B = new Float32Array(N);
       for (var i = 0; i < N; i++) { CURVA_S[i] = Math.sin(i / (N - 1) * Math.PI / 2); CURVA_B[i] = Math.cos(i / (N - 1) * Math.PI / 2); }
       return ctx;
@@ -550,7 +615,17 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       return Promise.all(nombres.map(function (n) {
         if (bufs[n]) return null;
         var b = Carga.blob('a:' + n); if (!b) return null;
-        return b.arrayBuffer().then(function (ab) { return new Promise(function (ok) { ctx.decodeAudioData(ab, function (buf) { bufs[n] = buf; ini[n] = comienzo(buf); ok(); }, function (e) { console.warn('cabaña: audio', n, e); ok(); }); }); });
+        return b.arrayBuffer().then(function (ab) { return new Promise(function (ok) {
+          var hecho = function (buf) { bufs[n] = buf; ini[n] = comienzo(buf); ok(); }, mal = function (e) { console.warn('cabaña: audio', n, e); ok(); };
+          /* (v2) Las camas son largas (la música de dentro dura seis minutos): decodificadas a la frecuencia del navegador ocuparían entre
+             todas unos 250 MB de memoria. Se decodifican a 24 kHz (la mitad): son fondos suaves, por debajo de la voz, y por encima de
+             12 kHz no llevan nada que se eche de menos. Si el navegador no sabe decodificar a esa frecuencia, se hace como siempre. */
+          var dec = null;
+          if (/^cama_/.test(n)) { try { var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext; dec = new OAC(2, 1, 24000); } catch (x) { dec = null; } }
+          if (!dec) { ctx.decodeAudioData(ab, hecho, mal); return; }
+          var otra = function () { b.arrayBuffer().then(function (ab2) { ctx.decodeAudioData(ab2, hecho, mal); }, mal); };      // (el primer intento se queda con los datos: se vuelven a leer)
+          try { var pr = dec.decodeAudioData(ab, hecho, otra); if (pr && pr.catch) pr.catch(function () {}); } catch (x) { otra(); }
+        }); });
       }));
     }
     function comienzo(buf) {           // segundo en que el sonido deja de ser silencio (para que una tecla suene en cuanto se pulsa)
@@ -569,7 +644,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       o = o || {}; var b = bufs[nombre]; if (!b) return null;
       para(clave, o.fundido == null ? 1.5 : o.fundido);
       var g = ctx.createGain(); g.gain.value = 0; g.connect(o.a || bus[o.bus || 'amb']);
-      var X = Math.min(o.cruce || 3.5, b.duration / 3), st = { g: g, parado: false, vol: o.vol == null ? 1 : o.vol, fuentes: [] };
+      var X = Math.min(o.cruce || 3.5, b.duration / 3), st = { g: g, parado: false, vol: o.vol == null ? 1 : o.vol, fuentes: [], fija: !!o.fija };
       function lanza(t, primero) {
         if (st.parado) return;
         if (t < ctx.currentTime + 0.01) t = ctx.currentTime + 0.02;      // el aviso llegó tarde (pestaña en segundo plano, ordenador ocupado): se empieza ya
@@ -605,11 +680,77 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var h = { fuente: s, g: g, dur: dur, inicio: t, para: function (seg) { seg = seg == null ? 0.08 : seg; try { var n = ctx.currentTime; g.gain.cancelScheduledValues(n); g.gain.setValueAtTime(g.gain.value, n); g.gain.linearRampToValueAtTime(0, n + seg); s.stop(n + seg + 0.02); } catch (x) {} } };
       return h;
     }
-    function silencio(seg) { Object.keys(vivos).forEach(function (k) { para(k, seg == null ? 0.6 : seg); }); }
+    function silencio(seg) { Object.keys(vivos).forEach(function (k) { if (!vivos[k].fija) para(k, seg == null ? 0.6 : seg); }); }      // (las camas no se cortan aquí: las lleva Camas)
     return { arranca: arranca, prepara: prepara, bucle: bucle, para: para, nivel: nivel, una: una, silencio: silencio, rampa: rampa,
       bus: function (n) { return bus[n]; }, buf: function (n) { return bufs[n]; }, pon: function (n, b) { bufs[n] = b; },
       sonda: function () { arranca(); var a = ctx.createAnalyser(); a.fftSize = 8192; a.smoothingTimeConstant = 0; maestro.connect(a); return a; },
-      hay: function (n) { return !!bufs[n]; }, ini: function (n) { return ini[n] || 0; }, ahora: function () { return ctx ? ctx.currentTime : 0; }, ctx: function () { return ctx; } };
+      hay: function (n) { return !!bufs[n]; }, ini: function (n) { return ini[n] || 0; }, ahora: function () { return ctx ? ctx.currentTime : 0; }, ctx: function () { return ctx; },
+      suena: function () { return !!ctx && ctx.state === 'running'; }, sonando: function (k) { return !!vivos[k]; } };
+  })();
+
+  /* ═══════════════════════ LAS CAMAS: la música y los ambientes continuos ═══════════════════════
+     (7-oct, Iago: «que cuando hay esas paradas la música siga» · «el ambiente de pájaros, que entre muy suave: durante la historia casi no
+     suena y en los momentos de pausa suena muchísimo» · «en la portada no hay sonido ambiente y me gustaría que lo hubiese»)
+     La música de fuera, la de dentro, el valle y la estufa ya NO van dentro del sonido de cada tramo: suenan aquí, seguidos, y no se cortan
+     en las paradas. Cada día trae la curva de cada cama: cuánto suena en cada segundo de la historia (ya agachada debajo de la voz, tal
+     como sale de la mezcla). Mientras corre un tramo se sigue esa curva; al parar (un «Seguir», una pausa, un cartel), la cama se queda
+     como estaba. Solo se retiran —muy despacio— al abrir una estación, donde hay que escuchar otra cosa, y vuelven igual de despacio. */
+  var Camas = (function () {
+    var DEF = { valle: { a: 'cama_valle', cruce: 4 }, mus_ext: { a: 'cama_mus_ext', cruce: 5 }, fuego: { a: 'fuego', cruce: 3.5 }, mus_dentro: { a: 'cama_mus_dentro', cruce: 6 } };
+    var PORTADA = 0.7;                 // cuánto suena el valle en la portada (la curva de cada día empieza justo ahí: sin escalón)
+    var C = null, E = {}, tAnt = null, tSalto = 0, enPort = false, mae = 1;
+    function nodo(n) {
+      if (E[n]) return E[n];
+      var c = Sonido.arranca(), g = c.createGain(); g.gain.value = 0; g.connect(Sonido.bus('cama'));
+      return (E[n] = { g: g, on: false, obj: 0 });
+    }
+    function lanza(n, desde) {         // pone a correr el bucle de una cama; cuánto se oye lo decide su nodo
+      var x = nodo(n); if (!DEF[n] || !Sonido.hay(DEF[n].a)) return false;
+      Sonido.bucle('cama:' + n, DEF[n].a, { a: x.g, vol: 1, fundido: 0.04, cruce: DEF[n].cruce, desde: Math.max(0, desde || 0), fija: true });
+      x.on = true; L('cama ' + n + (desde ? ' desde ' + desde.toFixed(1) : '')); return true;
+    }
+    function quita(n, seg) { var x = E[n]; if (!x || !x.on) return; x.on = false; Sonido.para('cama:' + n, seg == null ? 1.2 : seg); }
+    function pon(n, v, tau) {
+      var x = nodo(n), c = Sonido.ctx(), t = c.currentTime; x.obj = v;
+      try { x.g.gain.cancelScheduledValues(t); x.g.gain.setTargetAtTime(v, t, Math.max(0.01, tau)); } catch (z) { x.g.gain.value = v; }
+    }
+    function vale(c, t) {              // la curva es una quebrada [[t, v]…]
+      var n = c.length; if (t <= c[0][0]) return c[0][1]; if (t >= c[n - 1][0]) return c[n - 1][1];
+      var a = 0, b = n - 1;
+      while (b - a > 1) { var m = (a + b) >> 1; if (c[m][0] <= t) a = m; else b = m; }
+      var p = c[a], q = c[b]; return q[0] > p[0] ? p[1] + (q[1] - p[1]) * (t - p[0]) / (q[0] - p[0]) : q[1];
+    }
+    function sigue(t) {                // t = segundo de la historia (se llama en cada fotograma mientras corre un tramo)
+      if (!C || !Sonido.ctx()) return;
+      var ahora = performance.now(), salto = tAnt == null || Math.abs(t - tAnt) > 0.6;
+      if (salto) tSalto = ahora;       // al entrar en un tramo (o al saltar dentro de él) se llega a la curva con suavidad, no de golpe
+      var tau = ahora - tSalto < 1600 ? 0.45 : 0.07, n;
+      for (n in C) {
+        if (!DEF[n]) continue;
+        var d = C[n], v = vale(d.c, t) * (d.k || 1), x = nodo(n), i;
+        if (!salto && d.arr) for (i = 0; i < d.arr.length; i++) if (tAnt < d.arr[i][0] && t >= d.arr[i][0] && x.obj < 0.02) lanza(n, d.arr[i][1]);      // esta música empieza aquí, por este compás
+        if (v > 0.0008 && !x.on) {
+          var desde = 0;
+          if (d.arr) for (i = d.arr.length - 1; i >= 0; i--) if (d.arr[i][0] <= t) { desde = d.arr[i][1] + (t - d.arr[i][0]); break; }
+          lanza(n, desde);
+        }
+        if (salto || Math.abs(v - x.obj) > 0.0003) pon(n, v, tau);
+      }
+      for (n in E) if (!C[n] && E[n].obj > 0) pon(n, 0, 0.5);
+      tAnt = t;
+    }
+    function maestro(v, seg) { mae = v; if (Sonido.ctx()) Sonido.rampa(Sonido.bus('cama').gain, v, seg == null ? 1.5 : seg); }
+    function dia(D) { C = (D && D.camas) || null; tAnt = null; enPort = false; }
+    function portada() {               // en la portada: solo el valle, entrando despacio
+      C = null; tAnt = null; enPort = true;
+      if (!Sonido.ctx()) return;
+      maestro(1, 1.5);
+      Object.keys(E).forEach(function (m) { if (m === 'valle') return; pon(m, 0, 0.35); setTimeout(function () { if (enPort) quita(m, 0.3); }, 2400); });
+      if (Sonido.hay(DEF.valle.a)) { var x = nodo('valle'); if (!x.on) lanza('valle', 0); pon('valle', PORTADA, 0.9); }
+    }
+    return { sigue: sigue, maestro: maestro, dia: dia, portada: portada, DEF: DEF,
+      recursos: function (lista) { return (lista || []).filter(function (n) { return DEF[n]; }).map(function (n) { return 'a:' + DEF[n].a; }); },
+      estado: function () { var o = { maestro: mae, real: Sonido.ctx() ? +Sonido.bus('cama').gain.value.toFixed(3) : null, dia: !!C }; for (var n in E) o[n] = { on: E[n].on, obj: +E[n].obj.toFixed(4), real: +E[n].g.gain.value.toFixed(4) }; return o; } };
   })();
 
   /* ═══════════════════════ EL MICRO DEL AULA ═══════════════════════ */
@@ -646,7 +787,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
 
   /* ═══════════════════════ INTERFAZ ═══════════════════════ */
   var UI = (function () {
-    var seguir, salir, caja, activo = null;
+    var seguir, salir, caja, activo = null, alPausar = null;
     function coloca() {
       var W = innerWidth, H = innerHeight, s = Math.min(W / VW, H / VH);
       $('#marco').style.transform = 'translate(' + ((W - VW * s) / 2).toFixed(2) + 'px,' + ((H - VH * s) / 2).toFixed(2) + 'px) scale(' + s.toFixed(5) + ')';
@@ -669,9 +810,18 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       document.addEventListener('keydown', function (e) {       // espacio, Intro o → pulsan el botón que esté a la vista
         if (e.repeat || e.altKey || e.ctrlKey || e.metaKey) return;
         if (/INPUT|TEXTAREA|SELECT/.test((e.target && e.target.tagName) || '')) return;
-        if ((e.code === 'Space' || e.code === 'Enter' || (e.code === 'ArrowRight' && !e.shiftKey)) && activo && !document.body.classList.contains('teclas')) { e.preventDefault(); var f = activo; f(); }
+        if ((e.code === 'Space' || e.code === 'Enter' || (e.code === 'ArrowRight' && !e.shiftKey)) && activo && !document.body.classList.contains('teclas')) { e.preventDefault(); var f = activo; f(); return; }
+        /* (7-oct, Iago: «que pueda haber pause durante la secuencia, en cualquier momento») si no hay ningún botón que pulsar y la historia
+           está corriendo, la barra espaciadora la para y la reanuda */
+        if ((e.code === 'Space' || e.code === 'KeyK' || e.code === 'MediaPlayPause') && alPausar && !document.body.classList.contains('teclas')) { e.preventDefault(); alPausar(); }
       });
+      var hazPausa = function (e) { if (!alPausar) return; if (e) { e.preventDefault(); e.stopPropagation(); } try { $('#bPausa').blur(); } catch (x) {} alPausar(); };
+      $('#bPausa').addEventListener('click', hazPausa); $('#pausa').addEventListener('click', hazPausa);
+      $('#capas').addEventListener('click', hazPausa);                // un clic (o un toque) en la imagen también para y reanuda
     }
+    /* mientras corre un tramo, «f» para y reanuda la historia (null: ahora no se puede parar: una espera, una estación, la portada) */
+    function pausable(f) { alPausar = f; $('#bPausa').classList.toggle('hay', !!f); if (!f) document.body.classList.remove('pausa'); }
+    function pausa(si) { document.body.classList.toggle('pausa', !!si); if (si) document.body.classList.remove('sincursor'); }
     /* un botón que se enseña y se espera a que lo pulsen. Devuelve {fin: promesa, quita()} */
     function pulsa(b, texto) {
       if (texto) b.firstChild.textContent = texto;
@@ -702,7 +852,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
     function sombra(v, seg) { var s = $('#sombra'); s.style.transitionDuration = (seg == null ? 0.5 : seg) + 's'; s.style.opacity = v; }
     function negro(v, seg) { var s = $('#negro'); s.style.transitionDuration = (seg == null ? 0.6 : seg) + 's'; s.style.opacity = v; return espera(seg == null ? 0.6 : seg); }
     function aviso(t, seg) { var a = $('#aviso'); a.textContent = t; a.hidden = false; clearTimeout(a._t); if (seg) a._t = setTimeout(function () { a.hidden = true; }, seg * 1000); }
-    return { crea: crea, pulsaSeguir: pulsaSeguir, pulsaCaja: pulsaCaja, cartel: cartel, sombra: sombra, negro: negro, aviso: aviso,
+    return { crea: crea, pulsaSeguir: pulsaSeguir, pulsaCaja: pulsaCaja, cartel: cartel, sombra: sombra, negro: negro, aviso: aviso, pausable: pausable, pausa: pausa,
       salir: function (si) { salir.classList.toggle('on', !!si); }, activo: function (f) { activo = f; } };
   })();
 
@@ -720,6 +870,9 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var listo = false, tIni = performance.now();
       function alAcabar() {
         if (o.auto && performance.now() - tIni < 2500) { cierra(); Sonido.arranca(); ok(); return; }
+        audios(lista).then(alAcabar2, alAcabar2);                   // (v2) la música de fondo es larga: se prepara aquí, con la barra a la vista
+      }
+      function alAcabar2() {
         if (!o.micro || Micro.hay() || Micro.estado() === 'no') { bE.hidden = false; UI.activo(function () { bE.click(); }); return; }
         Micro.concedido().then(function (ya) {
           if (ya) return Micro.pide().then(function () { bE.hidden = false; UI.activo(function () { bE.click(); }); });
@@ -761,7 +914,8 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
     var cv, cx, svg, dom;
     function crea() { cv = $('#vLienzo'); cx = cv.getContext('2d'); svg = $('#vSvg'); dom = $('#vDom'); }
     function limpia() { lista.forEach(function (o) { if (o.quita) o.quita(); }); lista = []; cx.clearRect(0, 0, VW, VH); while (svg.firstChild) svg.removeChild(svg.firstChild); dom.innerHTML = ''; }
-    function pon(o) { lista.push(o); return o; }
+    function pon(o, tipo) { if (tipo) o.tipo = tipo; lista.push(o); return o; }
+    function hay(tipo) { for (var i = 0; i < lista.length; i++) if (lista[i].tipo === tipo) return lista[i]; return null; }
     function tick(t, corre) {          // t = segundo de la línea de tiempo del día; corre = el vídeo avanza (no es una espera)
       cx.clearRect(0, 0, VW, VH);
       for (var i = lista.length - 1; i >= 0; i--) {
@@ -770,6 +924,25 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
         o.tick(t, corre, cx);
       }
     }
+    /* (v2 · 7-oct, Iago: «el texto que pones tú a posteriori en base al experimento tiene una tipografía de letra un poquito más diferente»)
+       La letra es la misma del vídeo («Mano»), pero allí el trazo va engordado 1 px por cada lado, lleva grano (el grafito no cubre igual en
+       todas partes) y pasa por la compresión del vídeo, que lo ablanda; aquí salía más fino y más nítido. Ahora lleva el mismo grosor y un
+       filtro que le pone ese grano y esa blandura. (En Safari el filtro se dibuja a menos resolución: allí va solo con el grosor.) */
+    var SAFARI = /^((?!chrome|chromium|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent);
+    function grafito() {
+      if (SAFARI) return false;
+      if (svg.querySelector('#grafito')) return true;
+      try {
+        var d = document.createElementNS(NS, 'defs');
+        d.innerHTML = '<filter id="grafito" x="-4%" y="-45%" width="108%" height="190%" color-interpolation-filters="sRGB">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" seed="11" result="n"/>' +
+          '<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.4 0 0 0 0.72" result="m"/>' +
+          '<feGaussianBlur in="SourceGraphic" stdDeviation="0.42" result="b"/>' +
+          '<feComposite in="b" in2="m" operator="in"/></filter>';
+        svg.insertBefore(d, svg.firstChild);
+        return !!svg.querySelector('#grafito');
+      } catch (x) { return false; }
+    }
     /* una línea escrita «a mano» (la libreta o la tiza): se va descubriendo de izquierda a derecha */
     function linea(g, texto, color, grosor) {
       var id = 'cl' + Math.random().toString(36).slice(2, 8);
@@ -777,15 +950,22 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var r = document.createElementNS(NS, 'rect'); r.setAttribute('x', g.x - 20); r.setAttribute('y', g.yb - g.tam * 1.5); r.setAttribute('height', g.tam * 2.4); r.setAttribute('width', 0); cp.appendChild(r);
       var t = document.createElementNS(NS, 'text');
       t.setAttribute('x', g.x); t.setAttribute('y', g.yb); t.setAttribute('font-family', 'Mano, cursive'); t.setAttribute('font-size', g.tam);
-      t.setAttribute('fill', color); t.setAttribute('stroke', color); t.setAttribute('stroke-width', grosor == null ? 1.4 : grosor); t.setAttribute('stroke-linejoin', 'round');
+      t.setAttribute('fill', color); t.setAttribute('stroke', color); t.setAttribute('stroke-width', grosor == null ? 2.5 : grosor); t.setAttribute('stroke-linejoin', 'round'); t.setAttribute('stroke-linecap', 'round');
       t.setAttribute('clip-path', 'url(#' + id + ')'); t.setAttribute('transform', 'rotate(' + (-g.giro) + ' ' + g.x + ' ' + g.y + ')');
       t.setAttribute('xml:space', 'preserve'); t.textContent = texto;
+      if (grafito()) t.setAttribute('filter', 'url(#grafito)');
       svg.appendChild(cp); svg.appendChild(t);
-      var ancho = 0;
-      return { t: t, pon: function (k, op) { if (!ancho) { try { ancho = t.getComputedTextLength() + 34; } catch (x) { ancho = 900; } } r.setAttribute('width', lin(k) * ancho); t.setAttribute('opacity', op); },
+      /* el ancho se mide con la letra «Mano» ya cargada: si se mide antes (la primera vez que se usa, el navegador aún la está preparando),
+         sale el de otra letra y el final de la línea se quedaba sin descubrir («34 dB;» → «34»). Mientras no esté, se vuelve a medir. */
+      var ancho = 0, firme = false;
+      function mide() {
+        try { ancho = t.getComputedTextLength() + 34; } catch (x) { ancho = 900; }
+        try { firme = !document.fonts || !document.fonts.check || document.fonts.check(Math.round(g.tam) + 'px Mano'); } catch (x) { firme = true; }
+      }
+      return { t: t, pon: function (k, op) { if (!firme) mide(); r.setAttribute('width', lin(k) * ancho); t.setAttribute('opacity', op); },
         quita: function () { t.remove(); cp.remove(); } };
     }
-    return { crea: crea, limpia: limpia, pon: pon, tick: tick, linea: linea, dom: function () { return dom; }, svg: function () { return svg; } };
+    return { crea: crea, limpia: limpia, pon: pon, hay: hay, tick: tick, linea: linea, dom: function () { return dom; }, svg: function () { return svg; }, lienzo: function () { return cx; } };
   })();
 
   /* la aguja del sonómetro (lámina L19b): gira alrededor del centro del arco y se esconde tras el embellecedor de abajo */
@@ -856,7 +1036,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
           lec.style.opacity = ol; if (ol > 0) lec.textContent = hay ? Math.round(vLec) + ' dB' : '— dB';
           tizas.forEach(function (o, i) {
             var z = o.z; if (t < z.t) return;
-            if (!o.ln) { var id = d.ventanas[i].id; o.ln = Vivo.linea(z, z.txt + ': ' + (med[id] != null ? med[id] + ' dB' : 'sin micro'), 'rgb(255,246,222)', 1.5); if (med[id] != null) { clase.medidas = clase.medidas || {}; clase.medidas[id] = med[id]; Estado.guarda(); } }
+            if (!o.ln) { var id = d.ventanas[i].id; o.ln = Vivo.linea(z, z.txt + ': ' + (med[id] != null ? med[id] + ' dB' : 'sin micro'), 'rgb(255,246,222)', 2.5); if (med[id] != null) { clase.medidas = clase.medidas || {}; clase.medidas[id] = med[id]; Estado.guarda(); } }
             o.ln.pon((t - z.t) / z.dur, 0.96 * (1 - lin((t - z.t1) / 0.6)) * op);
           });
         },
@@ -897,7 +1077,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       }
       return { hasta: d.t1 + 0.6,
         tick: function (t) {
-          if (!lns) { if (t < d.lineas[0].t - 0.05) return; var ts = textos(); lns = d.lineas.map(function (g, i) { return Vivo.linea(g, ts[i], 'rgb(52,47,43)', 1.5); }); }
+          if (!lns) { if (t < d.lineas[0].t - 0.05) return; var ts = textos(); lns = d.lineas.map(function (g, i) { return Vivo.linea(g, ts[i], 'rgb(52,47,43)', 2.5); }); }
           var op = 0.93 * (1 - lin((t - (d.t1 - 0.1)) / 0.4));
           lns.forEach(function (ln, i) { var g = d.lineas[i]; ln.pon((t - g.t) / g.dur, op); });
         },
@@ -915,6 +1095,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       o = o || {}; var def = EST[id], raiz = $('#estacion');
       L('estación ' + id);
       Sonido.arranca(); Sonido.silencio(0.8); Video.para(0.4);
+      Camas.maestro(0, o.modo === 'libre' ? 1.5 : 3.0);           // (7-oct, Iago: «que la música se desvanezca muy poco a poco»): aquí hay que escuchar otra cosa
       var fondo = def.fondo ? (Carga.rec('v:' + def.fondo) ? Video.bucle(def.fondo, 0.6) : Video.imagen(def.fondo, 0.6)) : Promise.resolve();
       return Promise.all([fondo, audios(def.recursos || [])]).then(function () {
         UI.sombra(def.oscuro == null ? 0.5 : def.oscuro, 0.6);
@@ -946,56 +1127,57 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
   })();
 
   /* ═══════════════════════ LA HISTORIA: tramos, esperas y estaciones, uno detrás de otro ═══════════════════════ */
-  var corte = { v: 0 }, enPortada = true, boton = null, AMB = null;
+  var corte = { v: 0 }, enPortada = true, boton = null;
   function tramoDe(D, id) { for (var i = 0; i < D.tramos.length; i++) if (D.tramos[i].id === id) return D.tramos[i]; }
   function esperaDe(D, id) { for (var i = 0; i < D.esperas.length; i++) if (D.esperas[i].id === id) return D.esperas[i]; }
   function claves(D, p) {             // qué archivos hacen falta para un paso
     var d = D.dia, k = [];
-    if (p.tramo) k.push('v:d' + d + '_' + p.tramo);
+    if (p.tramo) { k.push('v:d' + d + '_' + p.tramo); k = k.concat(Camas.recursos((tramoDe(D, p.tramo) || {}).camas)); }
     if (p.espera) { var e = esperaDe(D, p.espera); k.push((e.tipo === 'bucle' ? 'v:' : 'i:') + 'd' + d + '_' + p.espera); if (e.tipo === 'bucle') k.push('i:d' + d + '_' + p.espera); }
-    if (p.amb && AMBIENTES[p.amb]) k = k.concat(AMBIENTES[p.amb].recursos || []);
     if (p.estacion && EST[p.estacion]) k = k.concat(recursosEst(p.estacion));
     if (p.extra && EXTRAS[p.extra] && EXTRAS[p.extra].recursos) k = k.concat(EXTRAS[p.extra].recursos);
     return k;
   }
   function recursosEst(id) { var e = EST[id], k = (e.recursos || []).slice(); if (e.fondo) { k.push('v:' + e.fondo); k.push('i:' + e.fondo); } return k; }
-  /* el ambiente que suena mientras se espera (la música de los tramos va dentro de cada vídeo y se apaga al acabar) */
-  var AMBIENTES = {
-    valle: { recursos: ['a:amb_valle'], pon: function () { Sonido.bucle('amb', 'amb_valle', { vol: 0.3, fundido: 1.6 }); } },
-    dentro: { recursos: ['a:fuego', 'a:mus_dentro'], pon: function () { Sonido.bucle('amb', 'fuego', { vol: 0.9, fundido: 1.6 }); Sonido.bucle('amb2', 'mus_dentro', { vol: 0.42, fundido: 2.5, cruce: 5 }); } },
-    dos_sonidos: { pon: function () { if (EXTRAS.dos_sonidos) EXTRAS.dos_sonidos.suena(); } }
-  };
-  function ambiente(n) {
-    if (AMB === n) return;
-    quitaAmbiente(0.8); AMB = n;
-    if (n && AMBIENTES[n] && Sonido.ctx()) AMBIENTES[n].pon();
-  }
-  function quitaAmbiente(seg) { if (!AMB) return; Sonido.para('amb', seg); Sonido.para('amb2', seg); if (EXTRAS.dos_sonidos) EXTRAS.dos_sonidos.calla(seg); AMB = null; }
+  /* (v2) En las esperas ya no se pone ningún «ambiente» aparte: la música y los fondos son las camas (ver Camas), que siguen sonando solas. */
   var EXTRAS = {};                    // cosas pequeñas que se tocan dentro de una espera (las registra estaciones.js)
 
   function pasoTramo(D, p, vivo, estado) {
     var T = tramoDe(D, p.tramo), nombre = 'd' + D.dia + '_' + T.id;
-    quitaAmbiente(0.7);
-    return Video.tramo(nombre, { fundido: estado.primero ? 0.5 : 0.35 }).then(function (r) {
+    /* (7-oct, Iago: «después de lo de quitar las capas, al darle a continuar historia, vuelve a aparecer durante unos milisegundos lo de
+       paisaje sonoro, lo cual queda feo») Si se viene de una estación, el tramo no empieza por su primer fotograma (donde todavía se está
+       apagando lo que había en pantalla antes de parar) sino un poco después, ya limpio (T.limpio lo calcula pagina.py). Y la música y el
+       ambiente, que la estación había retirado, vuelven muy poco a poco. */
+    var desde = estado.trasEstacion ? (T.limpio || 0) : 0, tapa = estado.trasEstacion ? (T.tapa || 0) : 0;
+    if (estado.trasEstacion) Camas.maestro(1, 4.0);
+    estado.trasEstacion = false;
+    return Video.tramo(nombre, { fundido: estado.primero ? 0.5 : 0.35, desde: desde, tapa: tapa }).then(function (r) {
       if (!vivo()) { if (r.capa) Video.calla(r.capa, 0.2); return 'cortado'; }
       estado.primero = false; UI.sombra(0, 0.4);
-      (T.vivos || []).forEach(function (d) { if (HECHOS_VIVOS[d.tipo]) Vivo.pon(HECHOS_VIVOS[d.tipo](d)); });
+      (T.vivos || []).forEach(function (d) { if (HECHOS_VIVOS[d.tipo] && !Vivo.hay(d.tipo)) Vivo.pon(HECHOS_VIVOS[d.tipo](d, D), d.tipo); });
       if (r.falta) return 'fin';
-      var v = r.capa, pulsado = false, fin = false, b = null;
+      var v = r.capa, pulsado = false, fin = false, b = null, parado = false;
       return new Promise(function (ok) {
-        function acaba(como) { if (fin) return; fin = true; document.removeEventListener('keydown', tecla); ok(como); }
+        function acaba(como) { if (fin) return; fin = true; document.removeEventListener('keydown', tecla); UI.pausable(null); ok(como); }
         function tecla(e) {            // para quien da la clase: mayúsculas + → salta al final del tramo; mayúsculas + ← lo repite
           if (!e.shiftKey || document.body.classList.contains('teclas')) return;
-          if (e.code === 'ArrowRight') { try { v.currentTime = Math.max(0, v.duration - 0.3); } catch (x) {} }
+          if (e.code === 'ArrowRight') { try { v.currentTime = Math.max(0, v.duration - 0.3); } catch (x) {} if (parado) pausa(); }
           if (e.code === 'ArrowLeft') { try { v.currentTime = 0; } catch (x) {} }
         }
+        function pausa() {             // la historia se para y se reanuda (la voz y la imagen; la música de fondo sigue sonando bajito, como en las demás paradas)
+          if (fin) return; parado = !parado;
+          if (parado) { try { v.pause(); } catch (x) {} } else { var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+          UI.pausa(parado); L(parado ? 'pausa' : 'sigue');
+        }
         document.addEventListener('keydown', tecla);
+        UI.pausable(pausa);
         r.fin.then(function () { acaba(pulsado ? 'pulsado' : 'fin'); });
         (function mira() {
           if (fin) return;
           if (!vivo()) { Video.calla(v, 0.25); return acaba('cortado'); }
           var t = T.t0r + v.currentTime;
-          Vivo.tick(t, true);
+          Camas.sigue(t);
+          Vivo.tick(t, !parado);
           if (!b && T.seguir != null && t >= T.seguir) { b = UI.pulsaSeguir(); boton = b; b.fin.then(function (si) { if (si && !fin) { pulsado = true; acaba('pulsado'); } }); }
           if (!b && T.boton && t >= T.boton.t) { b = UI.pulsaCaja(T.boton.caja, T.boton.texto); boton = b; b.fin.then(function (si) { if (si && !fin) { pulsado = true; acaba('pulsado'); } }); }
           requestAnimationFrame(mira);
@@ -1005,28 +1187,29 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
   }
   function pasoEspera(D, p, vivo, estado, anterior) {
     var e = esperaDe(D, p.espera), nombre = 'd' + D.dia + '_' + e.id;
-    if (anterior === 'pulsado' && !p.extra) { if (estado.boton) estado.boton.quita(); return siEstacion(D, p, vivo); }      // ya pulsaron «Seguir» en la cola del tramo
+    if (anterior === 'pulsado' && !p.extra) { if (estado.boton) estado.boton.quita(); return siEstacion(D, p, vivo, estado); }      // ya pulsaron «Seguir» en la cola del tramo
     var fondo = e.tipo === 'bucle' ? Video.bucle(nombre, anterior ? 0 : 0.5) : Video.imagen(nombre, anterior ? 0 : 0.5);
     return fondo.then(function () {
       if (!vivo()) return 'cortado';
-      ambiente(p.amb || null);
       Vivo.tick(e.t, false);
       var ex = p.extra && EXTRAS[p.extra] ? EXTRAS[p.extra].monta(Vivo.dom(), D) : null;
       var b = estado.boton || (p.boton ? UI.pulsaCaja(p.boton.caja, p.boton.texto) : UI.pulsaSeguir());
       estado.boton = null; boton = b;
-      var tm = setInterval(function () { Vivo.tick(e.t, false); }, 50);
-      return b.fin.then(function (si) { clearInterval(tm); if (ex && ex.quita) ex.quita(); if (!si || !vivo()) return 'cortado'; return siEstacion(D, p, vivo); });
+      var esperando = true;          // lo que va en vivo sigue vivo mientras se espera (a cada fotograma: las ondas de los dos sonidos se mueven)
+      (function g() { if (!esperando) return; if (vivo()) Vivo.tick(e.t, false); requestAnimationFrame(g); })();
+      return b.fin.then(function (si) { esperando = false; if (ex && ex.quita) ex.quita(); if (!si || !vivo()) return 'cortado'; return siEstacion(D, p, vivo, estado); });
     });
   }
-  function siEstacion(D, p, vivo) { return p.estacion ? pasoEstacion(D, p, vivo) : Promise.resolve('fin'); }
-  function pasoEstacion(D, p, vivo) {
+  function siEstacion(D, p, vivo, estado) { return p.estacion ? pasoEstacion(D, p, vivo, estado) : Promise.resolve('fin'); }
+  function pasoEstacion(D, p, vivo, estado) {
     var def = EST[p.estacion]; if (!def) return Promise.resolve('fin');
-    quitaAmbiente(1.0);
-    return UI.cartel({ ceja: def.ceja, titulo: def.cartel[0], texto: def.cartel[1] }).then(function (r) {
+    /* (v2 · 7-oct) una estación «directa» entra sin el cartel de «Ahora, vosotros»: la de oboe → clarinete sigue a la tarjeta «Para el examen» */
+    return (def.directa ? Promise.resolve('probar') : UI.cartel({ ceja: def.ceja, titulo: def.cartel[0], texto: def.cartel[1] })).then(function (r) {
       if (!vivo()) return 'cortado';
       if (r !== 'probar') return 'fin';
       return asegura(recursosEst(p.estacion), { ceja: def.sitio, titulo: 'Preparando ' + def.corto, boton: 'Seguir' }).then(function () {
         Vivo.limpia();
+        if (estado) estado.trasEstacion = true;
         return Estacion.abre(p.estacion, { modo: 'historia' });
       }).then(function () { return vivo() ? 'fin' : 'cortado'; }, function () { return 'fin'; });
     });
@@ -1041,13 +1224,19 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       Estado.e.prog = { dia: d, paso: idx }; Estado.guarda();
       var est = estanciaDe(D, idx);
       return asegura(est.claves, { ceja: 'Día ' + d + ' · ' + D.titulo, titulo: 'Preparando lo que viene', boton: 'Seguir' }).then(function () {
-        if (est.sig) Carga.pide(est.sig);                       // lo siguiente, por detrás y sin hacer esperar
+        if (est.sig && !est.sig._pedido) {                      // lo siguiente, por detrás y sin hacer esperar…
+          est.sig._pedido = 1; Carga.pide(est.sig);
+          var sig_ = est.sig, tmS = setInterval(function () {    // …y sus sonidos, decodificados en cuanto llegan (la música de fondo es larga)
+            if (!vivo()) return clearInterval(tmS);
+            var pr = Carga.progreso(sig_); if (pr.listo || pr.fin) { clearInterval(tmS); audios(sig_); }
+          }, 700);
+        }
         return audios(est.claves);
       }).then(function () {
         if (!vivo()) return 'cortado';
         if (p.tramo) return pasoTramo(D, p, vivo, estado);
         if (p.espera) return pasoEspera(D, p, vivo, estado, anterior);
-        if (p.estacion) return pasoEstacion(D, p, vivo);
+        if (p.estacion) return pasoEstacion(D, p, vivo, estado);
         return 'fin';
       }).then(function (r) { if (r === 'cortado') return r; anterior = p.tramo ? r : null; return sig(); });
     }
@@ -1082,19 +1271,30 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
   function portada() {
     corte.v++; enPortada = true; document.body.classList.remove('historia'); document.body.classList.remove('teclas');
     if (boton) { boton.quita(); boton = null; }
-    Video.para(0.4); quitaAmbiente(0.8); if (Sonido.ctx()) Sonido.silencio(0.8);
+    Video.para(0.4); if (Sonido.ctx()) Sonido.silencio(0.8);
     Vivo.limpia(); $('#cartel').classList.remove('on'); $('#lugares').classList.remove('on');
-    UI.salir(false); UI.sombra(0); $('#fps').hidden = false;
+    UI.salir(false); UI.sombra(0); UI.pausable(null); $('#fps').hidden = false;
     pintaPortada(); $('#portada').classList.remove('fuera');
-    return Estacion.cierra().then(function () { return fondoPortada(0.6); }).then(function () { UI.negro(0, 0.6); if (Sonido.ctx() && Sonido.hay('amb_valle')) Sonido.bucle('amb', 'amb_valle', { vol: 0.22, fundido: 2 }); });
+    Camas.portada();                // el valle, de fondo (en cuanto el navegador deja sonar: ver despierta())
+    return Estacion.cierra().then(function () { return fondoPortada(0.6); }).then(function () { UI.negro(0, 0.6); });
   }
+  /* (7-oct, Iago: «en la pantalla de portada no hay sonido ambiente y me gustaría que lo hubiese, porque si no suena como demasiado abrupto
+     cuando empieza la historia») Los navegadores no dejan que una página suene hasta que alguien la toca: el valle está preparado desde que
+     se carga la portada y empieza a oírse con el primer clic, toque o tecla, en cualquier sitio. Mientras tanto, la portada lo dice. */
+  function despierta() {
+    var c = Sonido.arranca();
+    if (c.state !== 'running') { var pr = c.resume(); if (pr && pr.then) pr.then(avisoSonido, function () {}); }
+    if (!c.onstatechange) c.onstatechange = avisoSonido;
+    avisoSonido();
+  }
+  function avisoSonido() { var a = $('#pSon'); if (a) a.hidden = Sonido.suena() || !Carga.rec('a:cama_valle'); }
   function entra(d, desde) {
     var D = DATOS.dias[d], est = estanciaDe(D, desde || 0);
     Sonido.arranca();
     $('#portada').classList.add('fuera'); enPortada = false;
     pantallaCargaSiHace(est.claves, { ceja: 'Día ' + d + ' · ' + D.titulo, titulo: 'Preparando el Día ' + d, boton: 'Empezar', micro: d < 3 }).then(function () {
       $('#fps').hidden = true; UI.salir(true); enPortada = false; document.body.classList.add('historia');
-      Sonido.para('amb', 1.0); Vivo.limpia();
+      Vivo.limpia(); Camas.dia(D);      // desde aquí, la música y los ambientes siguen las curvas de este día (el valle de la portada no se corta: la historia arranca desde él)
       return correDia(d, desde || 0);
     }).then(function (r) {
       if (r !== 'fin') return;
@@ -1127,28 +1327,30 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
     Sonido.arranca(); lu.classList.remove('on'); $('#portada').classList.add('fuera'); $('#fps').hidden = true; enPortada = false;
     var antes = def.micro && !Micro.hay() && Micro.estado() !== 'no' ? Micro.pide() : Promise.resolve();
     antes.then(function () { return asegura(recursosEst(id), { ceja: 'La cabaña abierta', titulo: 'Preparando ' + def.corto, boton: 'Entrar' }); }).then(function () {
-      enPortada = false; UI.salir(true); Sonido.para('amb', 0.8);
+      enPortada = false; UI.salir(true);
       return Estacion.abre(id, { modo: 'libre' });
-    }).then(function () { if (mio !== corte.v) return; UI.salir(false); return fondoPortada(0.5).then(function () { lugares(); }); })
+    }).then(function () { if (mio !== corte.v) return; UI.salir(false); Camas.portada(); return fondoPortada(0.5).then(function () { lugares(); }); })
       .catch(function (e) { if (!(e && e.message === 'volver')) console.error(e); if (mio === corte.v) { fondoPortada(0.4); lugares(); } });
   }
 
   function inicia(datos) {
     DATOS = datos;
     Video.crea($('#capas')); Vivo.crea(); UI.crea();
+    try { if (document.fonts && document.fonts.load) document.fonts.load('41px Mano').catch(function () {}); } catch (x) {}      // la letra de la libreta, lista desde el principio
     if (QS.has('mando')) { window.oye = function (seg) {       // (pruebas) escucha «seg» segundos: nivel máximo y frecuencia dominante en ese momento
       var a = Sonido.sonda(), t = new Float32Array(a.fftSize), f = new Float32Array(a.frequencyBinCount), mx = -200, hz = 0, n = 0, med = 0;
       return new Promise(function (ok) { var t0 = performance.now(); var tm = setInterval(function () {
         a.getFloatTimeDomainData(t); var s = 0; for (var i = 0; i < t.length; i++) s += t[i] * t[i]; var db = 10 * Math.log10(s / t.length + 1e-12); med += db; n++;
         if (db > mx) { mx = db; a.getFloatFrequencyData(f); var b = 0, m = -999; for (var j = 2; j < f.length; j++) if (f[j] > m) { m = f[j]; b = j; } hz = b * a.context.sampleRate / a.fftSize; }
         if (performance.now() - t0 > seg * 1000) { clearInterval(tm); ok({ max: +mx.toFixed(1), media: +(med / n).toFixed(1), hz: Math.round(hz) }); } }, 40); }); }; }
-    if (QS.has('mando')) window.CAB = { salta: function (t) { var v = Video.actual() && Video.actual().capa; if (v && v.duration) v.currentTime = t == null ? v.duration - 0.4 : t; return v ? +v.currentTime.toFixed(1) : null; }, Carga: Carga, Video: Video, Sonido: Sonido, UI: UI, REG: REG, Micro: Micro, Estado: Estado, EST: EST, DATOS: DATOS, entra: entra, abreLugar: abreLugar, Vivo: Vivo };
+    if (QS.has('mando')) window.CAB = { salta: function (t) { var v = Video.actual() && Video.actual().capa; if (v && v.duration) v.currentTime = t == null ? v.duration - 0.4 : t; return v ? +v.currentTime.toFixed(1) : null; }, Carga: Carga, Video: Video, Sonido: Sonido, UI: UI, REG: REG, Micro: Micro, Estado: Estado, EST: EST, DATOS: DATOS, entra: entra, abreLugar: abreLugar, Vivo: Vivo, Camas: Camas };
     var tmCur = null;                                                   // en la historia, el cursor se esconde si no se mueve
     document.addEventListener('mousemove', function () { document.body.classList.remove('sincursor'); clearTimeout(tmCur); tmCur = setTimeout(function () { document.body.classList.add('sincursor'); }, 2500); });
     $$('#portada .dia').forEach(function (b) { b.addEventListener('click', function () { entra(+b.getAttribute('data-dia'), 0); }); });
     $('#bContinuar').addEventListener('click', function () { var p = Estado.e.prog; if (p) entra(p.dia, vuelveA(DATOS.dias[p.dia], p.paso)); });
     $('#bLugares').addEventListener('click', lugares);
     $('#bSalir').addEventListener('click', function () { portada(); });
+    ['pointerdown', 'keydown', 'touchend'].forEach(function (ev) { document.addEventListener(ev, despierta, true); });
     pintaPortada();
     Carga.manifiesto().then(function (m) {
       if (m.sin30) $('#fps').hidden = true;
@@ -1156,7 +1358,13 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var t = setInterval(function () {
         if (!Carga.url('i:' + FONDO_PORTADA) && Carga.rec('i:' + FONDO_PORTADA)) return;
         clearInterval(t); Video.imagen(FONDO_PORTADA, 0.6);
-        Carga.pide(['v:' + FONDO_PORTADA, 'a:amb_valle']);
+        Carga.pide(['a:cama_valle', 'v:' + FONDO_PORTADA]);
+        var t3 = setInterval(function () {                             // el valle de la portada: se decodifica y queda listo para sonar con el primer gesto
+          if (!Carga.rec('a:cama_valle') || Carga.url('a:cama_valle') === null) return clearInterval(t3);
+          if (!Carga.url('a:cama_valle')) return;
+          clearInterval(t3);
+          Sonido.prepara(['cama_valle']).then(function () { if (enPortada) Camas.portada(); avisoSonido(); var c = Sonido.ctx(); if (c) c.onstatechange = avisoSonido; });
+        }, 200);
         var t2 = setInterval(function () {                             // cuando llega el bucle de la fachada, la portada cobra vida
           if (!Carga.rec('v:' + FONDO_PORTADA) || Carga.url('v:' + FONDO_PORTADA) === null) return clearInterval(t2);
           if (!Carga.url('v:' + FONDO_PORTADA)) return;
@@ -1174,8 +1382,8 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
   function guion(url) {               // carga (una vez) un guion suelto de la carpeta de la página
     return GUIONES[url] || (GUIONES[url] = new Promise(function (ok, no) { var s = document.createElement('script'); s.src = BASE + url; s.onload = ok; s.onerror = function () { delete GUIONES[url]; no(new Error('guion ' + url)); }; document.head.appendChild(s); }));
   }
-  window.Cabana = { inicia: inicia, estacion: estacion, extra: function (id, def) { EXTRAS[id] = def; }, ambiente: function (id, def) { AMBIENTES[id] = def; }, datos: function () { return DATOS; }, guion: guion, BASE: BASE,
-    Sonido: Sonido, Micro: Micro, Video: Video, UI: UI, Estado: Estado, Carga: Carga, Vivo: Vivo, util: { el: el, $: $, $$: $$, lin: lin, sua: sua, miles: miles, espera: espera, Aguja: Aguja, sonAguja: sonAguja }, L: L };
+  window.Cabana = { inicia: inicia, estacion: estacion, extra: function (id, def) { EXTRAS[id] = def; }, vivo: function (tipo, f) { HECHOS_VIVOS[tipo] = f; }, datos: function () { return DATOS; }, guion: guion, BASE: BASE,
+    Sonido: Sonido, Micro: Micro, Video: Video, UI: UI, Estado: Estado, Carga: Carga, Vivo: Vivo, Camas: Camas, util: { el: el, $: $, $$: $$, lin: lin, sua: sua, miles: miles, espera: espera, Aguja: Aguja, sonAguja: sonAguja }, L: L };
 })();
 
 /* La cabaña · Acústica (2.º GP) — estaciones: utilidades comunes (botones, teclado de piano, analizador de espectro, micro).
@@ -1318,12 +1526,16 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
   'use strict';
   var C = window.Cabana, U = C.util, E = C.est, el = U.el, lin = U.lin, S = C.Sonido, M = C.Micro;
 
-  /* ── los dos sonidos que oyó Cage en la cámara (suenan en la espera; se pueden apagar de uno en uno) ── */
+  /* ── los dos sonidos que oyó Cage en la cámara, EN VIVO ──
+     (7-oct, Iago: «que se empiece a sonar y ver la onda cuando el alumno o quien sea pulse el botón, durante la narración; no una vez que ya
+     se han escuchado») En el vídeo ya no van ni las ondas ni los tonos: van aquí, encima del tramo. Cuando la voz nombra cada sonido aparece
+     su botón; su onda y su sonido empiezan al pulsarlo (y se quitan al volver a pulsar). Siguen ahí durante la espera («El silencio no
+     existe») y se apagan solos al seguir con la historia. */
   (function () {
-    var N = null, on = { ag: true, gr: true };
+    var N = null, on = { ag: false, gr: false };
     function crea() {
-      var c = S.arranca(), t = c.currentTime + 0.02, sal = c.createGain(); sal.gain.value = 0; sal.connect(S.bus('amb'));
-      var ag = c.createGain(), gr = c.createGain(); ag.gain.value = on.ag ? 1 : 0; gr.gain.value = on.gr ? 1 : 0; ag.connect(sal); gr.connect(sal);
+      var c = S.arranca(), t = c.currentTime + 0.02, sal = c.createGain(); sal.gain.value = 1; sal.connect(S.bus('amb'));
+      var ag = c.createGain(), gr = c.createGain(); ag.gain.value = 0; gr.gain.value = 0; ag.connect(sal); gr.connect(sal);
       var fu = [];
       function osc(f, g, dest) { var o = c.createOscillator(), gg = c.createGain(); o.frequency.value = f; gg.gain.value = g; o.connect(gg); gg.connect(dest); o.start(t); fu.push(o); }
       function lfo(f, g, param) { var o = c.createOscillator(), gg = c.createGain(); o.frequency.value = f; gg.gain.value = g; o.connect(gg); gg.connect(param); o.start(t); fu.push(o); }
@@ -1335,25 +1547,71 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var pa = c.createBiquadFilter(); pa.type = 'highpass'; pa.frequency.value = 45; var pb = c.createBiquadFilter(); pb.type = 'lowpass'; pb.frequency.value = 170;
       var ng = c.createGain(); ng.gain.value = 0.5; ns.connect(pa); pa.connect(pb); pb.connect(ng); ng.connect(grG); ns.start(t); fu.push(ns);
       N = { sal: sal, ag: ag, gr: gr, fu: fu };
-      S.rampa(sal.gain, 1, 1.6);
       if (S.hay('latido')) S.bucle('latido', 'latido', { a: gr, vol: 0.34, fundido: 2.5, cruce: 1.5 });      // y el latido, muy por debajo
     }
     function calla(seg) {
+      on.ag = on.gr = false;
       if (!N) return; var n = N; N = null; seg = seg == null ? 0.8 : seg;
       S.rampa(n.sal.gain, 0, seg); S.para('latido', seg);
       setTimeout(function () { n.fu.forEach(function (o) { try { o.stop(); } catch (x) {} }); try { n.sal.disconnect(); } catch (x) {} }, seg * 1000 + 250);
     }
+    function pon(k, si) { on[k] = !!si; if (si && !N) crea(); if (N) S.rampa(N[k].gain, si ? 1 : 0, si ? 1.2 : 0.35); }
+
+    function hazVivo(d) {
+      var dom = C.Vivo.dom(), ahora = function () { return performance.now() / 1000; };
+      var F = { ag: { y: d.y_ag, yb: d.y_ag - 52, txt: 'Agudo', que: 'Sistema nervioso', t: d.t_ag, tq: d.t_sn },
+                gr: { y: d.y_gr, yb: d.y_gr - 68, txt: 'Grave', que: 'Flujo sanguíneo', t: d.t_gr, tq: d.t_fs } };
+      var ido = false, tAnt = ahora();
+      calla(0.05);
+      Object.keys(F).forEach(function (k) {
+        var f = F[k];
+        f.fila = el('div', 'dosFila'); f.fila.style.cssText = 'left:' + d.x0 + 'px;top:' + (f.yb - 27) + 'px';
+        f.b = E.interruptor(f.txt, function (si) { pon(k, si); f.b.classList.remove('late'); if (si) f.t0 = ahora(); }, false, 'son late');
+        f.b.title = 'Pulsa para oírlo';
+        f.r = el('span', 'dosQue', f.que);
+        f.fila.appendChild(f.b); f.fila.appendChild(f.r); dom.appendChild(f.fila);
+        f.a = 0; f.t0 = 0;
+      });
+      function onda(cx, k, alfa, tau) {
+        var f = F[k], rev = U.sua((tau - f.t0) / 1.1), xf = d.x0 + (d.x1 - d.x0) * rev, x, y;
+        cx.globalAlpha = 0.5 * alfa; cx.strokeStyle = '#fff'; cx.lineJoin = 'round'; cx.lineWidth = k === 'ag' ? 1.3 : 1.8; cx.beginPath();
+        for (x = d.x0; x <= xf; x += 3) {
+          if (k === 'ag') y = f.y + 4.5 * Math.sin(2 * Math.PI * (x / 19 - tau * d.v_ag[0])) * (0.75 + 0.25 * Math.sin(2 * Math.PI * (x / 310 + tau * d.v_ag[1])));
+          else {
+            var fase = (x / 520 - tau * d.v_gr) % 1; if (fase < 0) fase += 1;
+            var hincha = 1 + 0.45 * Math.exp(-Math.pow((fase - 0.30) / 0.11, 2)) + 0.2 * Math.exp(-Math.pow((fase - 0.55) / 0.09, 2));
+            y = f.y - 9 * hincha * Math.sin(2 * Math.PI * (x / 150 - tau * 0.5));
+          }
+          if (x === d.x0) cx.moveTo(x, y); else cx.lineTo(x, y);
+        }
+        cx.stroke(); cx.globalAlpha = 1;
+      }
+      return { hasta: d.t_fin + 1.9, tipo: 'dos_sonidos',
+        tick: function (t, corre, cx) {
+          var tau = ahora(), dt = Math.min(0.1, tau - tAnt); tAnt = tau;
+          var sale = 1 - lin((t - d.t_fin) / 0.8);                     // al seguir con la historia, todo esto se va
+          if (!ido && t >= d.t_fin - 0.02) { ido = true; calla(1.4); Object.keys(F).forEach(function (k) { F[k].b.disabled = true; F[k].b.classList.remove('on', 'late'); F[k].fila.style.pointerEvents = 'none'; }); }
+          Object.keys(F).forEach(function (k) {
+            var f = F[k], visto = t >= f.t;
+            f.fila.style.opacity = visto ? sale : 0; f.b.style.pointerEvents = visto && !ido ? 'auto' : 'none';
+            f.r.style.opacity = t >= f.tq ? 1 : 0;
+            f.a += ((on[k] ? 1 : 0) - f.a) * Math.min(1, dt / 0.25);     // la onda entra y sale con suavidad
+            if (f.a > 0.01 && sale > 0.01) onda(cx, k, f.a * sale, tau);
+          });
+        },
+        quita: function () { Object.keys(F).forEach(function (k) { F[k].fila.remove(); }); calla(0.4); } };
+    }
+    C.vivo('dos_sonidos', hazVivo);
+    /* en la espera: una línea que lo explica (y, si se llega aquí sin haber pasado por el tramo, los botones) */
     C.extra('dos_sonidos', { recursos: ['a:latido'],
-      suena: function () { on.ag = on.gr = true; if (!N) crea(); }, calla: calla,
-      monta: function (dom) {
-        var bs = [];
-        [['ag', 'El agudo', 'left:1622px;top:228px'], ['gr', 'El grave', 'left:1622px;top:776px']].forEach(function (d) {
-          var b = E.interruptor(d[1], function (si) { on[d[0]] = si; if (N) S.rampa(N[d[0]].gain, si ? 1 : 0, 0.35); }, true);
-          b.style.cssText = 'position:absolute;' + d[2]; dom.appendChild(b); bs.push(b);
-        });
-        var p = el('div', 'nota', 'Suenan los dos a la vez. Apaga uno para oír solo el otro.');
-        p.style.cssText = 'position:absolute;left:0;right:0;top:936px;text-align:center;text-shadow:0 0 12px rgba(0,0,0,.8)'; dom.appendChild(p); bs.push(p);
-        return { quita: function () { bs.forEach(function (b) { b.remove(); }); } };
+      monta: function (dom, D) {
+        if (!C.Vivo.hay('dos_sonidos')) {
+          var d = null; (D.tramos || []).forEach(function (T) { (T.vivos || []).forEach(function (v) { if (v.tipo === 'dos_sonidos') d = v; }); });
+          if (d) C.Vivo.pon(hazVivo(d), 'dos_sonidos');
+        }
+        var p = el('div', 'nota', 'Pulsa «Agudo» y «Grave» para oírlos. Los dos a la vez: eso fue lo que oyó Cage.');
+        p.style.cssText = 'position:absolute;left:0;right:0;top:936px;text-align:center;text-shadow:0 0 12px rgba(0,0,0,.8)'; dom.appendChild(p);
+        return { quita: function () { p.remove(); } };
       } });
   })();
 
@@ -1406,7 +1664,12 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
     cartel: ['Escucha por capas', 'Quita los sonidos más evidentes, uno a uno, y fíjate en lo que queda debajo.'],
     fondo: 'f_puerta', oscuro: 0.42, recursos: ['a:capa_viento', 'a:capa_pajaros', 'a:capa_agua', 'a:capa_hojas', 'a:capa_reloj'],
     monta: function (api) {
-      var CAPAS = [['viento', 'El viento', 0.95], ['pajaros', 'Los pájaros', 0.85], ['agua', 'El arroyo', 0.85], ['hojas', 'Las hojas', 0.9], ['reloj', 'El cronómetro', 0.55]];
+      /* (7-oct, Iago: «que cada uno de los sonidos vaya en sonido decreciente… tal y como está ahora, escuchas los cinco perfectamente cuando
+         suenan a la vez. Queremos que los primeros oculten a los últimos» y «el cronómetro, muy, muy bajo») Los niveles van en escalera, de unos
+         7–9 dB por peldaño (antes iban todos casi iguales: 0,95 · 0,85 · 0,85 · 0,9 · 0,55). Medido sobre los propios archivos: con todo puesto
+         mandan el viento y los pájaros; el arroyo queda al fondo; las hojas y el cronómetro quedan tapados. Al ir quitando los de arriba, cada
+         uno de los de abajo sale a la luz. El cronómetro, solo, se oye flojito (sus «tic» llegan a −24 dB). */
+      var CAPAS = [['viento', 'El viento', 1.0], ['pajaros', 'Los pájaros', 0.5], ['agua', 'El arroyo', 0.25], ['hojas', 'Las hojas', 0.11], ['reloj', 'El cronómetro', 0.045]];
       var fila = E.caja(api.raiz, 'left:0;right:0;top:452px;display:flex;justify-content:center;gap:24px'), bs = [];
       var msg = E.caja(api.raiz, 'left:0;right:0;top:612px;text-align:center;font-size:30px;font-weight:300;letter-spacing:.06em;min-height:44px;text-shadow:0 0 14px rgba(0,0,0,.8)');
       var pie = E.caja(api.raiz, 'left:0;right:0;top:716px;display:flex;justify-content:center;gap:18px');
@@ -1520,11 +1783,13 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       pa.type = 'highpass'; pb1.type = pb2.type = 'lowpass'; pb1.Q.value = pb2.Q.value = 0.6; sal.gain.value = 0;
       ent.connect(anA); ent.connect(pa); pa.connect(pb1); pb1.connect(pb2); pb2.connect(sal); sal.connect(anB); sal.connect(S.bus('est'));
       S.bucle('radio', 'radio_r', { a: ent, vol: 1, fundido: 0.6, cruce: 2 });
+      /* (7-oct, Iago) de izquierda a derecha: dentro · por la puerta entreabierta · a través de la pared sin aislar · con tabique doble y lana de roca;
+         y sin el «(Y eso es caro.)» */
       var POS = {
         dentro: ['Dentro, junto a la radio', 20, 20000, 0.5, 'Sin nada en medio, llega todo: graves y agudos.'],
-        pared: ['Fuera, tras la pared', 110, 1200, 0.95, '<b>Refracción</b>: el sonido atraviesa la madera, pero en cada cambio de medio se desvía y pierde fuerza. Los agudos se quedan por el camino.'],
-        lana: ['Con tabique doble y lana de roca', 110, 1000, 0.2, '<b>Aislar</b>: con el relleno, casi no pasa nada. (Y eso es caro.)'],
-        puerta: ['Por la puerta entreabierta', 150, 2600, 0.85, '<b>Difracción</b>: el sonido se cuela por el hueco y dobla la esquina. A los graves se les da especialmente bien.'] };
+        puerta: ['Por la puerta entreabierta', 150, 2600, 0.85, '<b>Difracción</b>: el sonido se cuela por el hueco y dobla la esquina. A los graves se les da especialmente bien.'],
+        pared: ['A través de la pared sin aislar', 110, 1200, 0.95, '<b>Refracción</b>: el sonido atraviesa la madera, pero en cada cambio de medio se desvía y pierde fuerza. Los agudos se quedan por el camino.'],
+        lana: ['Con tabique doble y lana de roca', 110, 1000, 0.2, '<b>Aislar</b>: con el relleno, casi no pasa nada.'] };
       var fila = E.caja(api.raiz, 'left:0;right:0;top:268px;display:flex;justify-content:center');
       var txt = E.caja(api.raiz, 'left:310px;width:1300px;top:356px;text-align:center;font-size:25px;line-height:1.4;letter-spacing:.02em;min-height:72px;text-shadow:0 0 12px rgba(0,0,0,.8)');
       E.elige(fila, Object.keys(POS).map(function (k) { return [k, POS[k][0]]; }), function (k) {
@@ -1544,11 +1809,20 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
 
   /* ════════════ LA CABAÑA VACÍA: reverberación y materiales absorbentes ════════════ */
   C.estacion('vacia', { dia: 2, sitio: 'Día 2 · Dentro de la cabaña', titulo: 'La cabaña vacía', corto: 'la cabaña vacía', micro: true,
-    que: 'Da un golpe o habla. Después, ve poniendo cortinas, alfombra y muebles, y escucha cómo se seca.',
-    cartel: ['La cabaña vacía', 'Da un golpe o habla en la cabaña vacía. Después, ve poniendo cortinas, alfombra y muebles, y escucha cómo se seca.'],
-    oscuro: 0, recursos: ['a:golpe', 'a:voz_iago', 'i:vacia_0', 'i:vacia_1', 'i:vacia_2', 'i:vacia_3', 'i:vacia_4', 'i:vacia_5', 'i:vacia_6', 'i:vacia_7'],
+    que: 'Da un golpe o habla. Después pon cortinas y alfombra, y luego los muebles, y escucha cómo se seca.',
+    cartel: ['La cabaña vacía', 'Da un golpe o habla en la cabaña vacía. Después pon cortinas y alfombra, y luego los muebles, y escucha cómo se seca.'],
+    /* (v2 · 7-oct, Iago: «después de una interacción… da como un frame de lo anterior») Esta parada pintaba la sala con imágenes propias y, debajo,
+       seguía el último fotograma del vídeo anterior (con su cartel «Aislar no es acondicionar»): al cerrar asomaba un instante. Ahora la sala
+       es también el fondo de verdad (y va cambiando con cada paso), así que al cerrar lo que hay debajo es la misma sala que se estaba viendo. */
+    fondo: 'vacia_0', oscuro: 0, recursos: ['a:golpe', 'a:voz_iago', 'i:vacia_0', 'i:vacia_3', 'i:vacia_7'],
     monta: function (api) {
-      var c = S.arranca(), bits = 0, RT = [1.8, 1.3, 1.45, 1.05, 0.7, 0.55, 0.6, 0.45], RI = {}, grabado = null;
+      /* (7-oct, Iago: «yo pondría cortinas más alfombra como botón, porque cortina solo y alfombra solo es demasiado poco. Al poner cortinas más
+         alfombra quiero que se reduzca el rebote a la mitad. Y si le añades muebles, quiero que acabe siendo ya absolutamente cero») Tres pasos:
+         vacía (la cola dura 1,8 s) · cortinas + alfombra (0,9 s) · + muebles (nada: suena seco del todo). */
+      var c = S.arranca(), paso = 0, RI = {}, grabado = null, grabando = false, vivo = true;
+      var PASOS = [{ txt: 'Vacía', img: 'vacia_0', rt: 1.8, lec: 'unos 1,8 s', que: 'Vacía: el sonido rebota y rebota.' },
+                   { txt: 'Cortinas + alfombra', img: 'vacia_3', rt: 0.9, lec: 'unos 0,9 s', que: 'La mitad: las telas se tragan parte de los rebotes.' },
+                   { txt: '+ Muebles', img: 'vacia_7', rt: 0, lec: 'nada', que: 'Seca del todo, sin cola: así se graba bien.' }];
       var imgs = [el('img'), el('img')], cual = 0;
       imgs.forEach(function (im, i) { im.alt = ''; im.style.cssText = 'position:absolute;left:0;top:0;width:1920px;height:1080px;transition:opacity .7s linear;opacity:' + (i ? 0 : 1); api.raiz.insertBefore(im, api.raiz.firstChild); });
       var velo = E.caja(api.raiz, 'left:0;top:0;width:1920px;height:1080px;background:linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,0) 26%,rgba(0,0,0,0) 62%,rgba(0,0,0,.55))'); api.raiz.insertBefore(velo, api.tit);
@@ -1562,31 +1836,55 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
       var ent = c.createGain(), seco = c.createGain(), moj = c.createGain(), conv = c.createConvolver(); conv.normalize = false;
       [ent, seco, moj].forEach(function (n) { n.channelCount = 2; n.channelCountMode = 'explicit'; });
       seco.gain.value = 0.85; moj.gain.value = 0.034; ent.connect(seco); seco.connect(S.bus('est')); ent.connect(conv); conv.connect(moj); moj.connect(S.bus('est'));
-      function pon() {
-        conv.buffer = ri(RT[bits]);
-        cual = 1 - cual; imgs[cual].src = api.Carga.url('i:vacia_' + bits); imgs[cual].style.opacity = 1; imgs[1 - cual].style.opacity = 0;
+      function pon(i) {
+        paso = i; var p = PASOS[i];
+        if (p.rt > 0) conv.buffer = ri(p.rt);
+        moj.gain.setTargetAtTime(p.rt > 0 ? 0.034 : 0, c.currentTime, 0.03);          // con muebles: cero absoluto (no queda ni rastro de la cola)
+        cual = 1 - cual; imgs[cual].src = api.Carga.url('i:' + p.img); imgs[cual].style.opacity = 1; imgs[1 - cual].style.opacity = 0;
         api.raiz.insertBefore(imgs[cual], velo);
-        lec.textContent = 'unos ' + coma(RT[bits]) + ' s';
-        cal.textContent = bits === 0 ? 'Vacía: el sonido rebota y rebota.' : RT[bits] <= 0.6 ? 'Seca y definida: así se graba bien.' : 'Algo más seca: los materiales se tragan parte de los rebotes.';
+        try { api.Video.imagen(p.img, 0); } catch (x) {}                       // el fondo de verdad, al día (queda tapado por estas imágenes)
+        lec.textContent = p.lec; cal.textContent = p.que;
       }
       var caja = E.caja(api.raiz, 'left:150px;top:742px;width:1290px;height:286px;padding:22px 34px', 'panel');
-      var f1 = E.txt(caja, 'fila', '<span class="ceja" style="width:190px;text-align:left;white-space:nowrap">Pon en la sala</span>', 'justify-content:flex-start;gap:14px');
-      [['Cortinas', 1], ['Alfombra', 2], ['Muebles', 4]].forEach(function (o) { f1.appendChild(E.interruptor(o[0], function (si) { bits = si ? bits | o[1] : bits & ~o[1]; pon(); }, false)); });
-      var f2 = E.txt(caja, 'fila', '<span class="ceja" style="width:190px;text-align:left;white-space:nowrap">Haz sonar</span>', 'justify-content:flex-start;gap:14px;margin-top:18px');
-      var bG = E.bot('Un golpe en la mesa'), bV = E.bot('La voz de Iago'), bM = E.bot('Vuestra voz'), bR = E.bot('Otra vez la vuestra'); bR.hidden = true;
+      var f1 = E.txt(caja, 'fila', '<span class="ceja" style="width:190px;text-align:left;white-space:nowrap">Pon en la sala</span>', 'justify-content:flex-start;gap:14px;flex-wrap:nowrap');
+      var sel = E.elige(f1, PASOS.map(function (p, i) { return [i, p.txt]; }), function (i) { pon(i); }, null);
+      sel.raiz.style.cssText = 'gap:14px;flex-wrap:nowrap';
+      /* (7-oct, Iago: «la hilera de hacer sonar quiero que ocupe solo una fila») */
+      var f2 = E.txt(caja, 'fila', '<span class="ceja" style="width:190px;text-align:left;white-space:nowrap">Haz sonar</span>', 'justify-content:flex-start;gap:14px;margin-top:18px;flex-wrap:nowrap');
+      var bG = E.bot('Un golpe'), bV = E.bot('La voz de Iago'), bM = E.bot('Grabar vuestra voz'), bR = E.bot('Oír la vuestra'); bR.hidden = true;
+      [bG, bV, bM, bR].forEach(function (b) { b.style.whiteSpace = 'nowrap'; });
       bG.onclick = function () { S.una('golpe', { a: ent, vol: 0.9 }); }; bV.onclick = function () { S.una('voz_iago', { a: ent, vol: 0.9 }); };
+      /* (7-oct, Iago: «cuando le das a grabar quiero que ponga como 3, 2, 1 para saber cuándo empieza a grabar; que haya algún tipo de indicador
+         visual») Cuenta atrás bien grande sobre la sala y, mientras graba, un punto rojo que late con su barra de tiempo. */
+      var cu = E.caja(api.raiz, '', 'cuenta', '<div class="cuNum">3</div><div class="cuTxt"></div><div class="cuBarra"><i></i></div>');
+      var cuNum = api.$('.cuNum', cu), cuTxt = api.$('.cuTxt', cu), cuBar = api.$('.cuBarra i', cu);
+      function espera(seg) { return new Promise(function (r) { setTimeout(r, seg * 1000); }); }
+      function botones(si) { [bG, bV, bM, bR].forEach(function (b) { b.disabled = !si; }); }
       bM.onclick = function () {
+        if (grabando) return;
         if (!M.hay()) { M.pide().then(function (si) { if (si) bM.onclick(); else aviso.textContent = 'Sin micrófono: prueba con el golpe o con la voz de Iago.'; }); return; }
-        bM.disabled = true; aviso.textContent = 'Grabando dos segundos… ¡hablad ahora!';
-        E.graba(2).then(function (b) { bM.disabled = false; aviso.textContent = ''; if (!b) return; grabado = b; bR.hidden = false; bM.firstChild.textContent = 'Grabar otra'; E.suena(b, ent, 1.6); });
+        grabando = true; botones(false); aviso.textContent = '';
+        cu.classList.remove('rec'); cuBar.style.transition = 'none'; cuBar.style.width = '0'; cuTxt.textContent = 'Preparados…'; cu.classList.add('on');
+        var paso_ = function (n) { cuNum.textContent = n; return espera(0.85); };
+        paso_(3).then(function () { return paso_(2); }).then(function () { return paso_(1); }).then(function () {
+          if (!vivo) return null;
+          cu.classList.add('rec'); cuTxt.textContent = 'Grabando · ¡hablad ahora!';
+          void cuBar.offsetWidth; cuBar.style.transition = 'width 2s linear'; cuBar.style.width = '100%';
+          return E.graba(2);
+        }).then(function (b) {
+          cu.classList.remove('on', 'rec'); grabando = false; if (!vivo) return; botones(true);
+          if (!b) { aviso.textContent = 'No se ha podido grabar: prueba con el golpe o con la voz de Iago.'; return; }
+          grabado = b; bR.hidden = false; bM.firstChild.textContent = 'Grabar otra'; aviso.textContent = 'Así suena vuestra voz en esta sala';
+          E.suena(b, ent, 1.6);
+        });
       };
       bR.onclick = function () { if (grabado) E.suena(grabado, ent, 1.6); };
       [bG, bV, bM, bR].forEach(function (b) { f2.appendChild(b); });
-      var f3 = E.txt(caja, 'fila', '', 'justify-content:flex-start;gap:26px;margin-top:20px;align-items:baseline');
-      E.txt(f3, 'ceja', 'La cola dura', 'width:190px;text-align:left;white-space:nowrap'); var lec = E.txt(f3, 'lec', '', 'font-size:44px;font-weight:200;letter-spacing:.03em;min-width:240px;text-align:left');
+      var f3 = E.txt(caja, 'fila', '', 'justify-content:flex-start;gap:26px;margin-top:20px;align-items:baseline;flex-wrap:nowrap');
+      E.txt(f3, 'ceja', 'La cola dura', 'width:190px;text-align:left;white-space:nowrap'); var lec = E.txt(f3, 'lec', '', 'font-size:44px;font-weight:200;letter-spacing:.03em;min-width:240px;text-align:left;white-space:nowrap');
       var cal = E.txt(f3, 'nota', ''), aviso = E.txt(caja, 'nota', '', 'position:absolute;right:34px;top:26px;color:var(--ambar)');
-      pon();
-      return function () { [ent, seco, moj, conv].forEach(function (n) { try { n.disconnect(); } catch (x) {} }); };
+      sel.pon(0);
+      return function () { vivo = false; [ent, seco, moj, conv].forEach(function (n) { try { n.disconnect(); } catch (x) {} }); };
     } });
 
   /* ════════════ EL SONÓMETRO, por libre ════════════ */
@@ -1905,6 +2203,143 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
   var NS = 'http://www.w3.org/2000/svg';
   function svg(tag, at, txt) { var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); if (txt != null) e.textContent = txt; return e; }
 
+  /* ════════════ DE OBOE A CLARINETE: el mismo oboe, con otra proporción entre sus armónicos ════════════
+     (7-oct-2026, Iago: «después del cartel donde pone "Para el examen" … fíjate cómo el timbre de oboe se convierte en clarinete modificando
+     las proporciones de los armónicos … que la intensidad de esos armónicos se adapta a la del clarinete y de repente el sonido es el del
+     clarinete; pero que sea real, es decir, que el sonido del oboe se modifica artificialmente; y que haya un botón».)
+     Lo que suena es la grabación del oboe (el mismo La 4 del vídeo) partida en sus doce armónicos: cada armónico es un búfer que se repite sin
+     costura (borrador/transforma.py mide en la grabación su intensidad instante a instante y el vibrato de la nota; aquí se reconstruyen).
+     Los doce suenan a la vez → suena el oboe. Al transformar, lo ÚNICO que cambia es el volumen de cada armónico, hasta que cada uno vale lo
+     que vale en la grabación del clarinete. Las barras son el mismo dibujo simplificado del vídeo (la receta de cada instrumento). */
+  function i16(b64) { var bin = atob(b64), n = bin.length >> 1, v = new Int16Array(n); for (var i = 0; i < n; i++) { var x = bin.charCodeAt(2 * i) | (bin.charCodeAt(2 * i + 1) << 8); v[i] = x > 32767 ? x - 65536 : x; } return v; }
+  var OBOE = null;
+  function modeloOboe(c, O) {         // los armónicos del oboe, cada uno en su búfer (una vuelta entera: M ciclos de la fundamental, en 440 Hz justos)
+    if (OBOE && OBOE.sr === c.sampleRate) return OBOE;
+    var K = O.K, P = O.P, N = Math.round(O.M / O.f0 * c.sampleRate), dev = i16(O.dev), can = O.amp.length, bufs = [], resp = new Float32Array(P), nr = 0;
+    var base = new Float64Array(N), i0 = new Int32Array(N), fr = new Float32Array(N), n, k, ch;
+    for (n = 0; n < N; n++) { var pos = n / N * P, a = Math.floor(pos), f = pos - a; i0[n] = a; fr[n] = f; base[n] = 2 * Math.PI * O.M * n / N + (dev[a] * (1 - f) + dev[(a + 1) % P] * f) * O.dev_e; }
+    for (k = 0; k < K; k++) {
+      var buf = c.createBuffer(can, N, c.sampleRate);
+      for (ch = 0; ch < can; ch++) {
+        var amp = i16(O.amp[ch][k]), e = O.amp_e[ch][k], ph = O.fase[ch][k], d = buf.getChannelData(ch);
+        for (n = 0; n < N; n++) { var p0 = i0[n]; d[n] = (amp[p0] * (1 - fr[n]) + amp[(p0 + 1) % P] * fr[n]) * e * Math.cos((k + 1) * base[n] + ph); }
+        if (O.propios.indexOf(k + 1) >= 0) { var med = 0; for (n = 0; n < P; n++) med += amp[n]; med /= P; for (n = 0; n < P; n++) resp[n] += amp[n] / med; nr++; }
+      }
+      bufs.push(buf);
+    }
+    for (n = 0; n < P; n++) resp[n] /= nr || 1;                       // el vaivén común de la nota: con él respiran las barras
+    return (OBOE = { sr: c.sampleRate, N: N, dur: N / c.sampleRate, bufs: bufs, resp: resp });
+  }
+  C.estacion('transforma', { dia: 3, sitio: 'Día 3 · El rincón del piano', titulo: 'De oboe a clarinete', corto: 'el oboe y el clarinete', directa: true,
+    que: 'Fíjate cómo el timbre del oboe se convierte en clarinete<br>modificando las proporciones de los armónicos.',
+    cartel: ['De oboe a clarinete', 'Convierte el timbre del oboe en el del clarinete cambiando solo la proporción de sus armónicos.'],
+    fondo: 'f_L14c', oscuro: 0.72, recursos: ['a:oboe_A4', 'a:clarinete_A4'],
+    monta: function (api) {
+      var D = api.datos, O = D.oboe, c = S.arranca(), K = O.K, vivo = true;
+      var rOb = D.dias[3].datos.oboe, rCl = D.dias[3].datos.clarinete;           // las recetas (las barras del vídeo)
+      var mod = modeloOboe(c, O), fuentes = [], tIni = 0, sonando = false, quiere = false, real = null, tmReal = null;
+      var sal = c.createGain(), niv = c.createGain(), gan = []; sal.gain.value = 0; niv.gain.value = O.G.ob; niv.connect(sal); sal.connect(S.bus('est'));
+      for (var k = 0; k < K; k++) { gan[k] = c.createGain(); gan[k].connect(niv); }
+      /* ── el camino: m = 0 (oboe) … 1 (clarinete). Cada armónico va de su volumen a su volumen × gan[k], en línea recta en decibelios */
+      var m = 0, anim = null, T_CAMINO = 3.4;
+      function gk(k, v) { return Math.pow(O.gan[k], v); }
+      function Gm(v) { return Math.pow(O.G.ob, 1 - v) * Math.pow(O.G.cl, v); }
+      function mAhora() {
+        if (!anim) return m;
+        var x = (c.currentTime - anim.t0) / anim.T;
+        if (x >= 1) { m = anim.m1; anim = null; return m; }
+        return anim.m0 + (anim.m1 - anim.m0) * Math.max(0, x);
+      }
+      function lleva(v, seg) {
+        var n = c.currentTime, ya = mAhora(), k, p;
+        for (k = 0; k <= K; k++) {
+          p = k < K ? gan[k].gain : niv.gain; var de = k < K ? gk(k, ya) : Gm(ya), a = k < K ? gk(k, v) : Gm(v);
+          p.cancelScheduledValues(n); p.setValueAtTime(de, n);
+          if (seg > 0.02) p.exponentialRampToValueAtTime(a, n + seg); else p.setTargetAtTime(a, n, 0.012);
+        }
+        if (seg > 0.02) anim = { m0: ya, m1: v, t0: n, T: seg }; else { anim = null; m = v; }
+      }
+      /* ── el sonido: los doce búferes arrancan en la misma muestra y dan vueltas a la vez */
+      function arranca() {
+        if (fuentes.length) return;
+        tIni = c.currentTime + 0.06;
+        fuentes = mod.bufs.map(function (b, k) { var s = c.createBufferSource(); s.buffer = b; s.loop = true; s.connect(gan[k]); s.start(tIni); return s; });
+      }
+      function suena(si, seg) {
+        quiere = si; if (si) arranca();
+        if (real) return;                                                  // mientras suena una grabación de verdad, esto calla; vuelve al acabar
+        sonando = si; S.rampa(sal.gain, si ? 1 : 0, seg == null ? (si ? 0.5 : 0.25) : seg); bS.classList.toggle('on', si);
+      }
+      function compara() {             // la grabación de verdad del instrumento en el que se está (para comparar con lo que sale de los armónicos)
+        if (real) { real.para(0.08); clearTimeout(tmReal); finReal(); return; }
+        var nombre = mAhora() < 0.5 ? 'oboe_A4' : 'clarinete_A4', r = D.rec[nombre];
+        S.rampa(sal.gain, 0, 0.08);
+        real = S.una(nombre, { vol: r && r.g ? r.g : 0.3, en: 0.1 }); if (!real) { finReal(); return; }
+        bC.classList.add('on'); queReal = nombre; pintaTexto();
+        tmReal = setTimeout(finReal, (real.dur + 0.25) * 1000);
+      }
+      function finReal() { real = null; queReal = null; bC.classList.remove('on'); if (!vivo) return; if (quiere) { sonando = true; S.rampa(sal.gain, 1, 0.35); } pintaTexto(); }
+      /* ── lo que se ve: las doce barras (con la marca de dónde está cada una en el oboe y en el clarinete), el camino y los botones */
+      var X0 = 432, PASO = 88, BASE = 690, ALTO = 300, cols = [], queReal = null;
+      function alto(a) { return Math.pow(a, 0.6) * ALTO; }
+      var zona = E.caja(api.raiz, 'left:0;top:0;width:1920px;height:1080px;pointer-events:none');
+      for (k = 0; k < K; k++) {
+        var col = E.caja(zona, 'left:' + (X0 + k * PASO) + 'px;top:' + (BASE - ALTO - 20) + 'px;width:' + PASO + 'px;height:' + (ALTO + 100) + 'px', 'tCol',
+          '<i></i><u class="ob" style="bottom:' + (80 + alto(rOb[k])).toFixed(1) + 'px"></u><u class="cl" style="bottom:' + (80 + alto(rCl[k])).toFixed(1) + 'px"></u><b>×' + (k + 1) + '</b><span>' + miles(Math.round(O.f0 * (k + 1))) + '</span>');
+        cols.push(api.$('i', col));
+      }
+      E.caja(zona, 'left:' + (X0 + K * PASO + 4) + 'px;top:' + (BASE + 44) + 'px;font-size:15px;text-transform:none;letter-spacing:.06em;opacity:.8', 'rot', 'Hz');
+      var ley = E.caja(zona, 'left:' + (X0 + K * PASO - 330) + 'px;width:330px;top:' + (BASE - ALTO - 62) + 'px;text-align:right;font-size:16px;letter-spacing:.14em', 'rot',
+        '<span class="tLey ob"></span>oboe &nbsp;&nbsp; <span class="tLey cl"></span>clarinete');
+      var nOb = E.caja(zona, 'left:60px;width:' + (X0 - 96) + 'px;top:' + (BASE - ALTO + 34) + 'px;text-align:right;font-size:40px;letter-spacing:.22em', 'rot', 'Oboe');
+      var nCl = E.caja(zona, 'left:60px;width:' + (X0 - 96) + 'px;top:' + (BASE - ALTO + 96) + 'px;text-align:right;font-size:40px;letter-spacing:.22em;color:var(--ambar)', 'rot', 'Clarinete');
+      var cam = E.caja(api.raiz, 'left:0;right:0;top:786px;display:flex;justify-content:center;align-items:center;gap:26px');
+      var eOb = E.txt(cam, 'rot', 'Oboe', 'position:static;font-size:19px'), des = E.desliza({ min: 0, max: 1, paso: 0.001, valor: 0, ancho: 640, alMover: function (v) { if (!quiere) suena(true); lleva(v, 0); pintaTexto(); } });
+      des.className = 'tCam'; cam.appendChild(des); var eCl = E.txt(cam, 'rot', 'Clarinete', 'position:static;font-size:19px;color:var(--ambar)');
+      var msg = E.caja(api.raiz, 'left:0;right:0;top:848px;text-align:center;font-size:25px;letter-spacing:.03em;min-height:36px;text-shadow:0 0 12px rgba(0,0,0,.8)');
+      var fila = E.caja(api.raiz, 'left:0;right:0;top:904px;display:flex;justify-content:center;gap:16px;align-items:center');
+      var bS = E.bot('Sonido', 'son'), bT = el('button', 'bot ambar', '<span>Convertir en clarinete</span>'), bC = E.bot('Oír el oboe de verdad');
+      bS.style.cssText = 'font-size:18px;padding:13px 22px 13px 18px;letter-spacing:.18em'; bT.style.cssText = 'font-size:21px;padding:17px 30px;min-width:410px;justify-content:center'; bC.style.minWidth = '388px'; bC.style.justifyContent = 'center';
+      [bS, bT, bC].forEach(function (b) { fila.appendChild(b); });
+      bS.onclick = function () { suena(!quiere); pintaTexto(); };
+      bT.onclick = function () {
+        var ya = mAhora(), a = anim ? (anim.m1 > anim.m0 ? 0 : 1) : (ya < 0.5 ? 1 : 0);      // a medio camino, el botón da la vuelta
+        if (!quiere) suena(true);
+        lleva(a, Math.max(0.6, T_CAMINO * Math.abs(a - ya))); pintaTexto();
+      };
+      bC.onclick = compara;
+      var txtAnt = '', botAnt = '', cmpAnt = '';
+      function pintaTexto() {
+        var v = mAhora(), yendo = anim ? (anim.m1 > anim.m0 ? 1 : -1) : 0;
+        var t = queReal === 'oboe_A4' ? 'La grabación del oboe, tal cual.' : queReal === 'clarinete_A4' ? 'La grabación del clarinete, tal cual. ¿Se parecen?' :
+          yendo ? 'Los armónicos no se mueven de sitio: solo cambia lo fuerte que suena cada uno.' :
+          v < 0.02 ? (quiere ? 'Esto es el oboe: su grabación, partida en sus doce primeros armónicos.' : 'El oboe: doce armónicos, cada uno con su intensidad.') :
+          v > 0.98 ? 'Los mismos armónicos, en otra proporción: ahora suena a clarinete.' : 'A medio camino: ya no es un oboe, y todavía no es un clarinete.';
+        if (t !== txtAnt) { msg.textContent = t; txtAnt = t; }
+        var b = (anim ? anim.m1 > anim.m0 : v >= 0.5) ? 'Volver a oboe' : 'Convertir en clarinete';
+        if (b !== botAnt) { bT.firstChild.textContent = b; botAnt = b; }
+        var q = real ? 'Parar la grabación' : v < 0.5 ? 'Oír el oboe de verdad' : 'Oír el clarinete de verdad';
+        if (q !== cmpAnt) { bC.firstChild.textContent = q; cmpAnt = q; }
+      }
+      api.cada(function () {
+        var v = mAhora(), r = 1, k;
+        if (sonando && fuentes.length) { var pos = (((c.currentTime - tIni) % mod.dur) + mod.dur) % mod.dur / mod.dur * O.P; r = Math.pow(mod.resp[Math.floor(pos) % O.P] || 1, 0.6); }
+        var col = 'rgb(255,' + Math.round(255 - 65 * v) + ',' + Math.round(255 - 159 * v) + ')';
+        for (k = 0; k < K; k++) { cols[k].style.height = Math.max(3, alto(Math.pow(rOb[k], 1 - v) * Math.pow(rCl[k], v)) * r).toFixed(1) + 'px'; cols[k].style.background = col; }
+        zona.style.opacity = sonando || real ? 1 : 0.62;
+        nOb.style.opacity = (1 - 0.78 * v).toFixed(3); nCl.style.opacity = (0.22 + 0.78 * v).toFixed(3);
+        if (anim || Math.abs(parseFloat(des.value) - v) > 0.0015) { if (document.activeElement !== des || anim) des.value = v; }
+        pintaTexto();
+      });
+      pintaTexto();
+      var tm0 = setTimeout(function () { if (vivo && !quiere && !real) { suena(true, 0.7); pintaTexto(); } }, api.modo === 'libre' ? 900 : 2400);      // el oboe entra solo, cuando la música ya se ha retirado
+      return function () {
+        vivo = false; clearTimeout(tm0); clearTimeout(tmReal); if (real) real.para(0.1);
+        var n = c.currentTime; try { sal.gain.cancelScheduledValues(n); sal.gain.setValueAtTime(sal.gain.value, n); sal.gain.linearRampToValueAtTime(0, n + 0.3); } catch (x) {}
+        setTimeout(function () { fuentes.forEach(function (s) { try { s.stop(); } catch (x) {} }); [sal, niv].concat(gan).forEach(function (g) { try { g.disconnect(); } catch (x) {} }); }, 450);
+      };
+    } });
+
   /* ════════════ LOS ARMÓNICOS DE LA FLAUTA: quitar y poner ════════════ */
   C.estacion('armonicos', { dia: 3, sitio: 'Día 3 · El rincón del piano', titulo: 'Desmonta la flauta', corto: 'la flauta',
     que: 'Este Do de flauta es la suma de dieciséis sonidos puros. Quita y pon los que quieras, y escucha.',
@@ -2160,7 +2595,7 @@ body.historia.sincursor,body.historia.sincursor *{cursor:none!important}
 
 </script>
 <script>
-Cabana.inicia({"dias":{"1":{"dia":1,"titulo":"El silencio","dur":380.97600000000006,"tramos":[{"id":"1","t0":5.0,"t1":36.800000000000004,"seguir":35.6,"f0":300,"f1":2208,"t0r":5.0,"dur":31.8},{"id":"2","t0":38.0,"t1":108.88400000000001,"seguir":107.68400000000001,"f0":2280,"f1":6533,"t0r":38.0,"dur":70.88333333333334},{"id":"3","t0":110.08400000000002,"t1":170.10300000000004,"seguir":168.90300000000005,"sale":0.35,"f0":6604,"f1":10206,"t0r":110.06666666666666,"dur":60.03333333333333},{"id":"4","t0":171.30300000000005,"t1":267.35800000000006,"seguir":266.1580000000001,"vivos":[{"tipo":"micro","t0":245.45800000000006,"t1":265.4580000000001,"y":868,"x0":360,"x1":1560}],"f0":10278,"f1":16041,"t0r":171.3,"dur":96.05},{"id":"5","t0":268.55800000000005,"t1":307.6440000000001,"seguir":306.44400000000013,"f0":16112,"f1":18459,"t0r":268.53333333333336,"dur":39.11666666666667},{"id":"6","t0":308.8440000000001,"t1":380.97600000000006,"f0":18530,"f1":22859,"t0r":308.8333333333333,"dur":72.15}],"esperas":[{"id":"w1","t":36.78,"tipo":"bucle"},{"id":"w2","t":108.86400000000002,"tipo":"bucle"},{"id":"w3","t":170.08300000000003,"tipo":"bucle"},{"id":"w4","t":267.3380000000001,"tipo":"bucle"},{"id":"w5","t":307.62400000000014,"tipo":"bucle"}],"pasos":[{"tramo":"1"},{"espera":"w1","amb":"valle"},{"tramo":"2"},{"espera":"w2","amb":"valle"},{"tramo":"3"},{"espera":"w3","amb":"dos_sonidos","extra":"dos_sonidos"},{"tramo":"4"},{"espera":"w4","amb":null,"extra":"veinte"},{"tramo":"5"},{"espera":"w5","amb":"valle","estacion":"capas"},{"tramo":"6"}],"estancias":[["1","w1","2","w2"],["3","w3","4","w4"],["5","w5","6"]],"datos":{"veinte":{"dur":20.0,"golpe":6.300000000000011}}},"2":{"dia":2,"titulo":"Duración, intensidad y altura","dur":610.7330000000009,"tramos":[{"id":"1","t0":4.0,"t1":78.26,"f0":240,"f1":4696,"t0r":4.0,"dur":74.26666666666667},{"id":"2","t0":84.46000000000001,"t1":148.26800000000003,"f0":5068,"f1":8896,"t0r":84.46666666666667,"dur":63.8},{"id":"3","t0":148.26800000000003,"t1":217.04399999999998,"f0":8896,"f1":13023,"t0r":148.26666666666668,"dur":68.78333333333333},{"id":"4","t0":217.04399999999998,"t1":239.4489999999999,"seguir":238.2489999999999,"f0":13022,"f1":14367,"t0r":217.03333333333333,"dur":22.416666666666668},{"id":"5","t0":240.64899999999992,"t1":322.78799999999995,"vivos":[{"tipo":"sonometro","t_on":283.2269999999999,"t_off":323.28799999999995,"t_vivo":283.9269999999999,"c":[965.0,834.0],"r":572.0,"lectura":{"t0":288.2629999999999,"t1":322.98799999999994,"x":960,"y":826,"tam":96},"ventanas":[{"id":"silencio","t0":293.6539999999999,"t1":297.1539999999999,"modo":"media"},{"id":"aplauso","t0":300.1059999999999,"t1":305.50599999999986,"modo":"max"},{"id":"grito","t0":311.30099999999993,"t1":314.0009999999999,"modo":"max"}],"tizas":[{"txt":"Silencio","x":534,"y":606,"tam":46,"giro":1.5,"t":297.30399999999986,"dur":0.9375,"t1":323.18799999999993,"yb":623.5},{"txt":"Aplauso","x":534,"y":668,"tam":46,"giro":1.5,"t":305.4559999999999,"dur":0.875,"t1":323.18799999999993,"yb":685.5},{"txt":"Grito","x":1106,"y":606,"tam":46,"giro":1.5,"t":314.05099999999993,"dur":0.8125,"t1":323.18799999999993,"yb":623.5}]}],"f0":14438,"f1":19367,"t0r":240.63333333333333,"dur":82.15},{"id":"6","t0":322.78799999999995,"t1":339.292,"f0":19366,"f1":20358,"t0r":322.76666666666665,"dur":16.533333333333335},{"id":"7","t0":339.292,"t1":364.89200000000017,"seguir":363.6920000000002,"vivos":[{"tipo":"libreta","dato":"medidas","lineas":[{"txt":"· Mi clase: silencio, 37 dB;","x":1022.4,"y":224.0,"tam":41,"giro":-0.54,"t":353.0370000000001,"dur":1.75,"pag":1,"fila":1.0,"yb":239.5},{"txt":"aplauso, 90; grito, 100.","x":1055.1,"y":282.6,"tam":41,"giro":-0.26,"t":355.0070000000001,"dur":1.5,"pag":1,"fila":2.0,"yb":298.1}],"t1":366.14200000000017}],"f0":20358,"f1":21894,"t0r":339.3,"dur":25.6},{"id":"8","t0":366.09200000000016,"t1":430.8120000000001,"f0":21966,"f1":25849,"t0r":366.1,"dur":64.71666666666667},{"id":"9","t0":430.8120000000001,"t1":554.1990000000002,"boton":{"t":553.2990000000002,"caja":[785,723.0,1135,789.0],"texto":"Entendido"},"vivos":[{"tipo":"oido","t0":464.8420000000001,"t1":509.8420000000001,"corte":16000.0}],"f0":25848,"f1":33252,"t0r":430.8,"dur":123.4},{"id":"10","t0":565.3830000000003,"t1":610.7330000000009,"vivos":[{"tipo":"libreta","dato":"oido","lineas":[{"txt":"· Esta clase oye hasta","x":1017.4,"y":223.8,"tam":41,"giro":0.19,"t":578.1755000000005,"dur":1.375,"pag":1,"fila":1.0,"yb":239.3},{"txt":"15.000 Hz.","x":1057.3,"y":282.1,"tam":41,"giro":0.54,"t":579.7705000000005,"dur":0.625,"pag":1,"fila":2.0,"yb":297.6}],"t1":590.7330000000009}],"f0":33922,"f1":36644,"t0r":565.3666666666667,"dur":45.36666666666667}],"esperas":[{"id":"lib1","t":239.4289999999999,"tipo":"img"},{"id":"lib2","t":364.8720000000002,"tipo":"img"},{"id":"tj","t":554.1790000000002,"tipo":"img"}],"pasos":[{"tramo":"1"},{"estacion":"eco"},{"tramo":"2"},{"estacion":"pared"},{"tramo":"3"},{"estacion":"vacia"},{"tramo":"4"},{"espera":"lib1","amb":"dentro"},{"tramo":"5"},{"estacion":"sonometro"},{"tramo":"6"},{"estacion":"radios"},{"tramo":"7"},{"espera":"lib2","amb":"dentro","vivos_de":"7"},{"tramo":"8"},{"estacion":"oscilador"},{"tramo":"9"},{"espera":"tj","amb":"dentro","boton":{"caja":[785,723.0,1135,789.0],"texto":"Entendido"}},{"tramo":"10"}],"estancias":[["1","2","3","4","lib1"],["5","6","7","lib2"],["8","9","tj","10"]],"datos":{"radios":{"rect":[[227,80,380,180],[413,80,573,180],[613,80,767,180],[817,80,955,180],[1007,80,1144,180],[1187,80,1380,180],[223,251,383,356],[417,251,580,356],[611,251,769,356],[807,251,987,356],[1020,251,1180,356],[1211,251,1373,356]],"orden":[6,0,9,3,7,11,1,4,10,2,8,5]},"test":{"dur":45.0,"corte":16000.0},"medidas_muestra":{"silencio":37,"aplauso":90,"grito":100},"cortinas":[[[196,0],[294,0],[296,666],[200,666]],[[44,250],[74,250],[74,582],[44,582]],[[628,160],[696,160],[696,346],[628,346]],[[797,160],[857,160],[857,402],[797,402]]],"alfombras":[[[697,664],[806,664],[824,832],[701,832]]]}},"3":{"dia":3,"titulo":"Timbre y síntesis","dur":374.14150000000006,"tramos":[{"id":"1","t0":4.0,"t1":29.064999999999994,"seguir":27.864999999999995,"f0":240,"f1":1744,"t0r":4.0,"dur":25.066666666666666},{"id":"2","t0":30.264999999999993,"t1":106.958,"boton":{"t":106.05799999999999,"caja":[785,691.0,1135,757.0],"texto":"Entendido"},"f0":1816,"f1":6417,"t0r":30.266666666666666,"dur":76.68333333333334},{"id":"3","t0":116.646,"t1":161.372,"f0":6998,"f1":9682,"t0r":116.63333333333334,"dur":44.733333333333334},{"id":"4","t0":161.372,"t1":207.63,"f0":9682,"f1":12458,"t0r":161.36666666666667,"dur":46.266666666666666},{"id":"5","t0":207.63,"t1":267.474,"f0":12458,"f1":16048,"t0r":207.63333333333333,"dur":59.833333333333336},{"id":"6","t0":267.474,"t1":294.0315000000002,"seguir":292.83150000000023,"f0":16048,"f1":17642,"t0r":267.46666666666664,"dur":26.566666666666666},{"id":"7","t0":295.2315000000002,"t1":330.96250000000015,"f0":17714,"f1":19858,"t0r":295.23333333333335,"dur":35.733333333333334},{"id":"8","t0":330.96250000000015,"t1":374.14150000000006,"f0":19858,"f1":22448,"t0r":330.96666666666664,"dur":43.166666666666664}],"esperas":[{"id":"lib0","t":29.044999999999995,"tipo":"img"},{"id":"tj","t":106.93799999999999,"tipo":"img"},{"id":"lib5","t":294.01150000000024,"tipo":"img"}],"pasos":[{"tramo":"1"},{"espera":"lib0","amb":"dentro"},{"tramo":"2"},{"espera":"tj","amb":"dentro","boton":{"caja":[785,691.0,1135,757.0],"texto":"Entendido"}},{"tramo":"3"},{"estacion":"armonicos"},{"tramo":"4"},{"estacion":"preparado"},{"tramo":"5"},{"estacion":"serie"},{"tramo":"6"},{"espera":"lib5","amb":"dentro"},{"tramo":"7"},{"estacion":"sinte"},{"tramo":"8"}],"estancias":[["1","lib0","2","tj"],["3","4","5","6","lib5"],["7","8"]],"datos":{"flauta":{"f0":261.63,"amp":[1.0,0.85,0.68,0.46,0.24,0.15,0.12,0.08,0.045,0.034,0.022,0.014,0.01,0.009,0.008,0.005]},"oboe":[1.0,0.8,0.66,0.5,0.38,0.28,0.2,0.14,0.1,0.07,0.05,0.035],"clarinete":[1.0,0.34,0.62,0.22,0.4,0.15,0.25,0.1,0.16,0.07,0.1,0.045],"serie":{"intervalos":["8J","5J","4J","3M","3m","3m","2M"],"codigo":"8543332"},"sinte":{"parciales":[[1,1.0],[3,0.55],[5,0.33]],"melodia":[[220.0,0.0,0.45],[277.18,0.45,0.45],[329.63,0.9,0.45],[440.0,1.35,0.5],[329.63,1.85,0.4],[440.0,2.25,1.5]]},"cage":{"credito":"Sonata V · «Sonatas e interludios» (1946-1948)","desde":0.8,"largo":18.45}}}},"rec":{"amb_valle":{"dur":44.0},"fuego":{"dur":30.0},"mus_dentro":{"dur":120.0},"latido":{"dur":12.0},"capa_viento":{"dur":18.0},"capa_pajaros":{"dur":18.0},"capa_agua":{"dur":18.0},"capa_hojas":{"dur":18.0},"capa_reloj":{"dur":16.0},"grito":{"dur":1.6},"radio_r":{"dur":26.0},"voz_iago":{"dur":1.343},"estatica":{"dur":22.0},"estatica_am":{"dur":22.0},"radio_boton":{"dur":0.523},"radio_dial":{"dur":2.981},"aplauso":{"dur":5.3},"golpe":{"dur":0.9},"flauta_p01":{"g":0.72122,"dur":5.577},"flauta_p02":{"g":0.46719,"dur":5.577},"flauta_p03":{"g":0.51705,"dur":5.577},"flauta_p04":{"g":0.40133,"dur":5.577},"flauta_p05":{"g":0.24666,"dur":5.577},"flauta_p06":{"g":0.14456,"dur":5.577},"flauta_p07":{"g":0.11559,"dur":5.577},"flauta_p08":{"g":0.09041,"dur":5.577},"flauta_p09":{"g":0.03186,"dur":5.577},"flauta_p10":{"g":0.04313,"dur":5.577},"flauta_p11":{"g":0.01556,"dur":5.577},"flauta_p12":{"g":0.00991,"dur":5.577},"flauta_p13":{"g":0.00708,"dur":5.577},"flauta_p14":{"g":0.00637,"dur":5.577},"flauta_p15":{"g":0.00567,"dur":5.577},"flauta_p16":{"g":0.00354,"dur":5.577},"cage_00":{"dur":1.456,"nombre":"gong grave"},"cage_01":{"dur":0.33,"nombre":"tambor sordo"},"cage_02":{"dur":0.184,"nombre":"golpe hueco"},"cage_03":{"dur":0.154,"nombre":"tambor"},"cage_04":{"dur":0.362,"nombre":"madera y campana"},"cage_05":{"dur":0.185,"nombre":"caja"},"cage_06":{"dur":0.154,"nombre":"madera seca"},"cage_07":{"dur":0.154,"nombre":"timbal"},"cage_08":{"dur":0.164,"nombre":"campanilla"},"cage_09":{"dur":0.176,"nombre":"chasquido"},"cage_10":{"dur":0.842,"nombre":"campanas"},"cage_11":{"dur":3.206,"nombre":"gong"},"cage_12":{"dur":3.606,"nombre":"acorde final"},"cage_frag":{"dur":18.45},"plato":{"dur":3.2},"piano_E2":{"dur":3.129},"piano_E3":{"dur":3.129},"piano_B3":{"dur":3.129},"piano_C4":{"dur":3.129},"piano_E4":{"dur":3.129},"piano_Ab4":{"dur":3.129},"piano_A4":{"dur":3.129},"piano_B4":{"dur":3.129},"piano_D5":{"dur":3.129},"piano_E5":{"dur":3.129},"piano_A3":{"dur":3.129}},"fondos":{"vacia":{"cortinas":[[[245.0,-100.0],[367.5,-100.0],[370.0,732.5],[250.0,732.5]],[[55.0,212.5],[92.5,212.5],[92.5,627.5],[55.0,627.5]],[[785.0,100.0],[870.0,100.0],[870.0,332.5],[785.0,332.5]],[[996.2,100.0],[1071.2,100.0],[1071.2,402.5],[996.2,402.5]]],"alfombras":[[[871.2,730.0],[1007.5,730.0],[1030.0,940.0],[876.2,940.0]]]},"radios":{"cajas":[{"x":235,"y":0,"w":289,"h":179,"r":[284,0,475,125]},{"x":467,"y":0,"w":298,"h":179,"r":[516,0,716,125]},{"x":717,"y":0,"w":291,"h":179,"r":[766,0,959,125]},{"x":972,"y":0,"w":271,"h":179,"r":[1021,0,1194,125]},{"x":1210,"y":0,"w":269,"h":179,"r":[1259,0,1430,125]},{"x":1435,"y":0,"w":339,"h":179,"r":[1484,0,1725,125]},{"x":230,"y":165,"w":298,"h":234,"r":[279,214,479,345]},{"x":472,"y":165,"w":302,"h":234,"r":[521,214,725,345]},{"x":715,"y":165,"w":295,"h":234,"r":[764,214,961,345]},{"x":960,"y":165,"w":323,"h":234,"r":[1009,214,1234,345]},{"x":1226,"y":165,"w":298,"h":234,"r":[1275,214,1475,345]},{"x":1465,"y":165,"w":300,"h":234,"r":[1514,214,1716,345]}],"orden":[6,0,9,3,7,11,1,4,10,2,8,5]}},"test":{"2.1":{"titulo":"Cualidades del sonido (duración e intensidad)","preguntas":[{"q":"El sonido es una vibración que se propaga como…","op":["Ondas mecánicas a través de un medio","Ondas electromagnéticas en el vacío","Partículas de luz"]},{"q":"Una reflexión del sonido inferior a 50 ms se percibe como…","op":["Reverb","Eco","Difracción"]},{"q":"Una reflexión superior a 50 ms se percibe como…","op":["Eco","Reverb","Refracción"]},{"q":"La capacidad del sonido de atravesar los materiales se llama…","op":["Refracción","Reflexión","Difracción"]},{"q":"Que el sonido gire esquinas o se cuele por huecos minúsculos es la…","op":["Difracción","Reflexión","Reverberación"]},{"q":"La unidad objetiva para medir la intensidad es…","op":["El decibelio (dB)","El hercio (Hz)","El forte"]},{"q":"Para que una sala suene seca (rebote mínimo) se usan materiales…","op":["Absorbentes (cortinas, paneles)","Aislantes muy pesados","Metálicos y duros"]}]},"2.2":{"titulo":"Cualidades del sonido (altura y timbre)","preguntas":[{"q":"La altura del sonido se mide objetivamente en…","op":["Hercios (Hz)","Decibelios (dB)","Milisegundos"]},{"q":"Los hercios indican…","op":["El número de oscilaciones por segundo","La presión sonora","La duración del sonido"]},{"q":"La frecuencia de resonancia del La4 (afinación estándar) es…","op":["440 Hz","220 Hz","4000 Hz"]},{"q":"El límite inferior de la audición humana está en torno a…","op":["20 Hz","2 Hz","200 Hz"]},{"q":"El timbre es la cualidad que permite…","op":["Distinguir un instrumento o voz de otro","Medir el volumen","Saber la duración"]},{"q":"El timbre se determina por…","op":["Las intensidades relativas de los armónicos","La frecuencia fundamental sola","El número de decibelios"]},{"q":"La misma nota en dos instrumentos distintos: sus armónicos…","op":["Están en los mismos lugares; cambia su proporción de intensidad","Son totalmente distintos","Desaparecen"]},{"q":"Un sonido es \"puro\" (sin armónicos) solo cuando…","op":["Se sintetiza artificialmente","Se toca en un piano","Lo canta una persona"]}]},"2.3":{"titulo":"Serie armónica","preguntas":[{"q":"Al tocar una nota, en realidad escuchamos…","op":["La fundamental y sus armónicos","Un único sonido puro","Dos notas exactamente iguales"]},{"q":"La serie armónica que estudiamos se acota a los…","op":["8 primeros sonidos","3 primeros sonidos","12 primeros sonidos"]},{"q":"El código de la serie se refiere a intervalos…","op":["Siempre ascendentes desde la fundamental","Siempre descendentes","Aleatorios"]},{"q":"En la serie de un Mi, las posiciones 1, 2, 4 y 8 son…","op":["La misma nota (mi)","Notas todas distintas","Silencios"]},{"q":"Un tambor suena \"indeterminado\" porque…","op":["Produce tantos armónicos que el cerebro no los ubica","No tiene ningún armónico","Suena demasiado grave"]},{"q":"El intervalo entre la fundamental y el 2.º armónico es una…","op":["8ª (octava)","5ª justa","3ª mayor"]}]}},"rev":"10061541"});
+Cabana.inicia({"dias":{"1":{"dia":1,"titulo":"El silencio","dur":380.97600000000006,"tramos":[{"id":"1","t0":5.0,"t1":36.800000000000004,"seguir":35.6,"f0":300,"f1":2208,"t0r":5.0,"dur":31.8,"camas":["valle","mus_ext"]},{"id":"2","t0":38.0,"t1":108.88400000000001,"seguir":107.68400000000001,"f0":2280,"f1":6533,"t0r":38.0,"dur":70.88333333333334,"limpio":0.15,"tapa":1.5,"camas":["valle","mus_ext"]},{"id":"3","t0":110.08400000000002,"t1":170.10300000000004,"seguir":168.90300000000005,"sale":0.35,"vivos":[{"tipo":"dos_sonidos","t_ag":148.41100000000003,"t_gr":149.97700000000003,"t_sn":156.12900000000002,"t_fs":159.062,"t_fin":171.15300000000005,"x0":330,"x1":1590,"y_ag":262,"y_gr":812,"v_ag":[2.5833333333333335,0.25],"v_gr":0.5833333333333334}],"f0":6604,"f1":10206,"t0r":110.06666666666666,"dur":60.03333333333333,"limpio":0.75,"camas":["valle","mus_ext"]},{"id":"4","t0":171.30300000000005,"t1":267.35800000000006,"seguir":266.1580000000001,"vivos":[{"tipo":"micro","t0":245.45800000000006,"t1":265.4580000000001,"y":868,"x0":360,"x1":1560}],"f0":10278,"f1":16041,"t0r":171.3,"dur":96.05,"limpio":0.5,"camas":[]},{"id":"5","t0":268.55800000000005,"t1":307.6440000000001,"seguir":306.44400000000013,"f0":16112,"f1":18459,"t0r":268.53333333333336,"dur":39.11666666666667,"limpio":0.0,"camas":["valle"]},{"id":"6","t0":308.8440000000001,"t1":380.97600000000006,"f0":18530,"f1":22859,"t0r":308.8333333333333,"dur":72.15,"limpio":0.86,"camas":["valle"]}],"esperas":[{"id":"w1","t":36.78,"tipo":"bucle"},{"id":"w2","t":108.86400000000002,"tipo":"bucle"},{"id":"w3","t":170.08300000000003,"tipo":"bucle"},{"id":"w4","t":267.3380000000001,"tipo":"bucle"},{"id":"w5","t":307.62400000000014,"tipo":"bucle"}],"pasos":[{"tramo":"1"},{"espera":"w1"},{"tramo":"2"},{"espera":"w2"},{"tramo":"3"},{"espera":"w3","extra":"dos_sonidos"},{"tramo":"4"},{"espera":"w4","extra":"veinte"},{"tramo":"5"},{"espera":"w5","estacion":"capas"},{"tramo":"6"}],"estancias":[["1","w1","2","w2"],["3","w3","4","w4"],["5","w5","6"]],"datos":{"veinte":{"dur":20.0,"golpe":6.300000000000011}},"camas":{"valle":{"c":[[0.0,0.0],[0.24,0.0],[0.26,0.7],[5.6,0.7],[8.1,0.3],[11.04,0.3],[11.66,0.18],[22.66,0.18],[24.48,0.3],[26.02,0.2996],[26.62,0.18],[42.3,0.18],[44.12,0.3],[49.96,0.3],[50.58,0.18],[132.06,0.18],[132.08,0.156],[132.18,0.006],[132.2,0.0],[298.72,0.0],[302.74,0.18],[365.82,0.18],[367.58,0.2962],[368.2,0.18],[374.96,0.18],[376.78,0.3],[379.16,0.3],[380.86,0.0028],[380.96,0.0]],"arr":[],"k":1.0},"mus_ext":{"c":[[0.0,0.0],[5.3,0.0],[6.5,0.4],[10.8,0.4],[11.8,0.168],[22.68,0.1683],[25.18,0.4],[25.78,0.3972],[26.78,0.168],[42.3,0.168],[44.82,0.4],[49.7,0.4],[50.72,0.168],[132.06,0.168],[132.08,0.1456],[132.18,0.0056],[132.2,0.0],[380.96,0.0]],"arr":[[5.3,3.2]],"k":1.0}}},"2":{"dia":2,"titulo":"Duración, intensidad y altura","dur":611.7780000000009,"tramos":[{"id":"1","t0":4.0,"t1":78.26,"f0":240,"f1":4696,"t0r":4.0,"dur":74.26666666666667,"camas":["valle","mus_ext"]},{"id":"2","t0":84.46000000000001,"t1":148.26800000000003,"f0":5068,"f1":8896,"t0r":84.46666666666667,"dur":63.8,"limpio":0.0,"camas":["valle","mus_ext"]},{"id":"3","t0":148.26800000000003,"t1":217.04399999999998,"f0":8896,"f1":13023,"t0r":148.26666666666668,"dur":68.78333333333333,"limpio":0.0,"tapa":0.24,"camas":["valle","mus_ext","fuego","mus_dentro"]},{"id":"4","t0":217.04399999999998,"t1":239.44899999999996,"seguir":238.24899999999997,"f0":13022,"f1":14367,"t0r":217.03333333333333,"dur":22.416666666666668,"limpio":0.36,"camas":["fuego","mus_dentro"]},{"id":"5","t0":240.64899999999997,"t1":339.29200000000003,"cortes":[322.788],"vivos":[{"tipo":"sonometro","t_on":283.227,"t_off":323.288,"t_vivo":283.92699999999996,"c":[965.0,834.0],"r":572.0,"lectura":{"t0":288.263,"t1":322.988,"x":960,"y":826,"tam":96},"ventanas":[{"id":"silencio","t0":293.65399999999994,"t1":297.15399999999994,"modo":"media"},{"id":"aplauso","t0":300.10599999999994,"t1":305.5059999999999,"modo":"max"},{"id":"grito","t0":311.301,"t1":314.001,"modo":"max"}],"tizas":[{"txt":"Silencio","x":534,"y":606,"tam":46,"giro":1.5,"t":297.3039999999999,"dur":0.9375,"t1":323.188,"yb":623.5},{"txt":"Aplauso","x":534,"y":668,"tam":46,"giro":1.5,"t":305.45599999999996,"dur":0.875,"t1":323.188,"yb":685.5},{"txt":"Grito","x":1106,"y":606,"tam":46,"giro":1.5,"t":314.051,"dur":0.8125,"t1":323.188,"yb":623.5}]}],"f0":14438,"f1":20358,"t0r":240.63333333333333,"dur":98.68333333333334,"limpio":0.54,"camas":["fuego","mus_dentro"]},{"id":"7","t0":339.29200000000003,"t1":364.8920000000002,"seguir":363.69200000000023,"vivos":[{"tipo":"libreta","dato":"medidas","lineas":[{"txt":"· Mi clase: silencio, 37 dB;","x":1022.4,"y":224.0,"tam":41,"giro":-0.54,"t":353.03700000000015,"dur":1.75,"pag":1,"fila":1.0,"yb":239.5},{"txt":"aplauso, 90; grito, 100.","x":1055.1,"y":282.6,"tam":41,"giro":-0.26,"t":355.0070000000002,"dur":1.5,"pag":1,"fila":2.0,"yb":298.1}],"t1":366.1420000000002}],"f0":20358,"f1":21894,"t0r":339.3,"dur":25.6,"limpio":0.0,"camas":["fuego","mus_dentro"]},{"id":"8","t0":366.0920000000002,"t1":430.8120000000002,"f0":21966,"f1":25849,"t0r":366.1,"dur":64.71666666666667,"limpio":0.51,"camas":["fuego","mus_dentro"]},{"id":"9","t0":430.8120000000002,"t1":554.1990000000002,"boton":{"t":553.2990000000002,"caja":[785,723.0,1135,789.0],"texto":"Entendido"},"vivos":[{"tipo":"oido","t0":464.84200000000016,"t1":509.84200000000016,"corte":16000.0}],"f0":25848,"f1":33252,"t0r":430.8,"dur":123.4,"limpio":0.0,"camas":["fuego","mus_dentro"]},{"id":"10","t0":565.3830000000003,"t1":611.7780000000009,"vivos":[{"tipo":"libreta","dato":"oido","lineas":[{"txt":"· Esta clase oye hasta","x":1017.4,"y":223.8,"tam":41,"giro":0.19,"t":579.2205000000006,"dur":1.375,"pag":1,"fila":1.0,"yb":239.3},{"txt":"15.000 Hz.","x":1057.3,"y":282.1,"tam":41,"giro":0.54,"t":580.8155000000006,"dur":0.625,"pag":1,"fila":2.0,"yb":297.6}],"t1":591.7780000000009}],"f0":33922,"f1":36707,"t0r":565.3666666666667,"dur":46.416666666666664,"limpio":0.63,"tapa":0.11,"camas":["valle","fuego","mus_dentro"]}],"esperas":[{"id":"lib1","t":239.42899999999995,"tipo":"img"},{"id":"lib2","t":364.87200000000024,"tipo":"img"},{"id":"tj","t":554.1790000000002,"tipo":"img"}],"pasos":[{"tramo":"1"},{"estacion":"eco"},{"tramo":"2"},{"estacion":"pared"},{"tramo":"3"},{"estacion":"vacia"},{"tramo":"4"},{"espera":"lib1"},{"tramo":"5"},{"estacion":"radios"},{"tramo":"7"},{"espera":"lib2","vivos_de":"7"},{"tramo":"8"},{"estacion":"oscilador"},{"tramo":"9"},{"espera":"tj","boton":{"caja":[785,723.0,1135,789.0],"texto":"Entendido"}},{"tramo":"10"}],"estancias":[["1","2","3","4","lib1"],["5","7","lib2"],["8","9","tj","10"]],"datos":{"radios":{"rect":[[227,80,380,180],[413,80,573,180],[613,80,767,180],[817,80,955,180],[1007,80,1144,180],[1187,80,1380,180],[223,251,383,356],[417,251,580,356],[611,251,769,356],[807,251,987,356],[1020,251,1180,356],[1211,251,1373,356]],"orden":[6,0,9,3,7,11,1,4,10,2,8,5]},"test":{"dur":45.0,"corte":16000.0},"medidas_muestra":{"silencio":37,"aplauso":90,"grito":100},"cortinas":[[[196,0],[294,0],[296,666],[200,666]],[[44,250],[74,250],[74,582],[44,582]],[[628,160],[696,160],[696,346],[628,346]],[[797,160],[857,160],[857,402],[797,402]]],"alfombras":[[[697,664],[806,664],[824,832],[701,832]]]},"camas":{"valle":{"c":[[0.0,0.0],[0.24,0.0],[0.26,0.7],[4.6,0.7],[7.1,0.3],[10.14,0.3],[10.76,0.18],[149.7,0.18],[150.22,0.213],[150.6,0.1917],[150.98,0.1606],[151.38,0.1172],[151.72,0.07],[154.82,0.0699],[156.16,0.0531],[156.76,0.0274],[157.82,0.0],[591.96,0.0],[595.48,0.18],[603.08,0.1801],[604.88,0.3],[609.98,0.2996],[611.66,0.0032],[611.76,0.0]],"arr":[],"k":1.0},"mus_ext":{"c":[[0.0,0.0],[4.3,0.0],[5.5,0.4],[9.9,0.4],[10.9,0.168],[97.14,0.168],[99.16,0.1008],[149.7,0.1008],[150.34,0.1073],[150.92,0.1004],[151.52,0.08],[152.1,0.0476],[152.72,0.0],[611.76,0.0]],"arr":[[4.3,2.0]],"k":1.0},"fuego":{"c":[[0.0,0.0],[150.2,0.0],[150.5,0.0896],[150.84,0.2141],[151.18,0.3591],[151.52,0.5236],[152.72,1.0],[154.8,1.0],[154.82,0.9943],[156.16,0.1568],[156.3,0.0629],[156.4,0.0058],[156.42,0.0],[195.74,0.0],[198.76,0.6],[291.24,0.6],[291.26,0.5964],[291.74,0.3084],[291.98,0.1781],[292.26,0.0],[297.04,0.0],[297.06,0.004],[297.6,0.364],[297.64,0.3813],[297.78,0.4272],[297.92,0.4557],[298.06,0.4668],[298.2,0.4604],[298.56,0.6],[299.86,0.601],[301.66,1.0],[305.94,1.0],[305.96,0.9973],[306.56,0.6],[311.0,0.6],[312.8,0.9998],[312.82,1.0],[315.04,1.0],[315.06,0.994],[315.64,0.6073],[315.66,0.6],[321.68,0.6],[323.5,1.0],[324.04,0.9987],[324.64,0.6],[399.54,0.6],[401.36,1.0],[402.08,1.0],[402.1,0.9947],[402.68,0.608],[402.7,0.6],[418.48,0.6],[419.94,0.9218],[420.54,0.6011],[420.56,0.6],[422.14,0.6],[423.58,0.9196],[423.6,0.9179],[424.18,0.6064],[424.2,0.6],[463.04,0.6],[463.54,0.7106],[463.66,0.6647],[463.82,0.5937],[463.98,0.5133],[464.12,0.4351],[464.38,0.2706],[464.56,0.1421],[464.74,0.0016],[464.76,0.0],[510.44,0.0],[512.44,0.999],[512.46,1.0],[512.58,1.0],[512.6,0.9947],[513.18,0.608],[513.2,0.6],[531.52,0.6001],[533.32,1.0],[538.46,1.0],[538.48,0.9927],[539.06,0.606],[539.08,0.6],[591.26,0.6],[591.28,0.5995],[593.78,0.0],[611.76,0.0]],"arr":[],"k":0.3162},"mus_dentro":{"c":[[0.0,0.0],[150.5,0.0],[150.9,0.0451],[151.34,0.1103],[151.78,0.1904],[152.22,0.2848],[153.52,0.5],[155.9,0.5],[156.92,0.21],[291.24,0.21],[291.98,0.0647],[292.26,0.0],[297.04,0.0],[297.06,0.002],[297.36,0.1017],[297.5,0.1361],[297.72,0.1749],[297.92,0.1939],[298.14,0.197],[298.36,0.1828],[298.56,0.21],[299.7,0.21],[299.86,0.1889],[300.32,0.1583],[302.36,0.3],[305.7,0.3],[306.72,0.126],[311.0,0.126],[313.5,0.2999],[314.0,0.3],[314.8,0.4065],[315.1,0.3691],[315.4,0.3175],[315.5,0.2972],[315.8,0.2103],[321.68,0.21],[323.78,0.4527],[324.8,0.21],[392.46,0.21],[393.68,0.084],[399.54,0.084],[401.74,0.186],[401.84,0.214],[401.92,0.223],[402.12,0.2371],[402.3,0.2408],[402.58,0.2292],[402.84,0.1998],[402.96,0.21],[414.96,0.21],[415.98,0.042],[418.48,0.042],[419.7,0.0696],[420.7,0.042],[422.14,0.042],[423.34,0.0698],[424.34,0.0421],[429.76,0.042],[431.28,0.21],[463.04,0.21],[463.54,0.2677],[463.82,0.2306],[464.12,0.1736],[464.4,0.1047],[464.74,0.0007],[464.76,0.0],[510.44,0.0],[512.34,0.4745],[512.44,0.4711],[513.34,0.2106],[513.36,0.21],[531.5,0.21],[531.82,0.2446],[532.02,0.2115],[532.22,0.1686],[532.42,0.116],[532.62,0.054],[534.02,0.08],[537.72,0.0803],[538.22,0.2302],[538.46,0.26],[538.7,0.2699],[538.86,0.2653],[539.02,0.2518],[539.12,0.2387],[539.22,0.21],[603.06,0.21],[605.58,0.5],[609.96,0.5],[609.98,0.4994],[611.66,0.0053],[611.68,0.0],[611.76,0.0]],"arr":[[150.511,0.0]],"k":1.0}}},"3":{"dia":3,"titulo":"Timbre y síntesis","dur":374.14150000000006,"tramos":[{"id":"1","t0":4.0,"t1":29.064999999999994,"seguir":27.864999999999995,"f0":240,"f1":1744,"t0r":4.0,"dur":25.066666666666666,"camas":["valle","mus_ext","fuego","mus_dentro"]},{"id":"2","t0":30.264999999999993,"t1":106.958,"boton":{"t":106.05799999999999,"caja":[785,691.0,1135,757.0],"texto":"Entendido"},"f0":1816,"f1":6417,"t0r":30.266666666666666,"dur":76.68333333333334,"limpio":0.52,"camas":["fuego","mus_dentro"]},{"id":"3","t0":116.646,"t1":161.372,"f0":6998,"f1":9682,"t0r":116.63333333333334,"dur":44.733333333333334,"limpio":0.18,"tapa":0.11,"camas":["fuego","mus_dentro"]},{"id":"4","t0":161.372,"t1":207.63,"f0":9682,"f1":12458,"t0r":161.36666666666667,"dur":46.266666666666666,"limpio":0.71,"camas":["fuego","mus_dentro"]},{"id":"5","t0":207.63,"t1":294.0315000000002,"seguir":292.83150000000023,"cortes":[267.474],"f0":12458,"f1":17642,"t0r":207.63333333333333,"dur":86.4,"limpio":0.8,"camas":["fuego","mus_dentro"]},{"id":"7","t0":295.2315000000002,"t1":330.96250000000015,"f0":17714,"f1":19858,"t0r":295.23333333333335,"dur":35.733333333333334,"limpio":0.52,"camas":["fuego","mus_dentro"]},{"id":"8","t0":330.96250000000015,"t1":374.14150000000006,"f0":19858,"f1":22448,"t0r":330.96666666666664,"dur":43.166666666666664,"limpio":0.7,"camas":["valle","mus_ext","fuego","mus_dentro"]}],"esperas":[{"id":"lib0","t":29.044999999999995,"tipo":"img"},{"id":"tj","t":106.93799999999999,"tipo":"img"},{"id":"lib5","t":294.01150000000024,"tipo":"img"}],"pasos":[{"tramo":"1"},{"espera":"lib0"},{"tramo":"2"},{"espera":"tj","boton":{"caja":[785,691.0,1135,757.0],"texto":"Entendido"}},{"estacion":"transforma"},{"tramo":"3"},{"estacion":"armonicos"},{"tramo":"4"},{"estacion":"preparado"},{"tramo":"5"},{"espera":"lib5"},{"tramo":"7"},{"estacion":"sinte"},{"tramo":"8"}],"estancias":[["1","lib0","2","tj"],["3","4","5","lib5"],["7","8"]],"datos":{"flauta":{"f0":261.63,"amp":[1.0,0.85,0.68,0.46,0.24,0.15,0.12,0.08,0.045,0.034,0.022,0.014,0.01,0.009,0.008,0.005]},"oboe":[1.0,0.8,0.66,0.5,0.38,0.28,0.2,0.14,0.1,0.07,0.05,0.035],"clarinete":[1.0,0.34,0.62,0.22,0.4,0.15,0.25,0.1,0.16,0.07,0.1,0.045],"serie":{"intervalos":["8J","5J","4J","3M","3m","3m","2M"],"codigo":"8543332"},"sinte":{"parciales":[[1,1.0],[3,0.55],[5,0.33]],"melodia":[[220.0,0.0,0.45],[277.18,0.45,0.45],[329.63,0.9,0.45],[440.0,1.35,0.5],[329.63,1.85,0.4],[440.0,2.25,1.5]]},"cage":{"credito":"Sonata V · «Sonatas e interludios» (1946-1948)","desde":0.8,"largo":18.45}},"camas":{"valle":{"c":[[0.0,0.0],[0.24,0.0],[0.26,0.7],[4.6,0.7],[7.1,0.3],[9.4,0.3],[11.4,0.06],[12.4,0.06],[14.9,0.0],[349.94,0.0],[350.8,0.078],[351.1,0.0841],[351.4,0.08],[352.54,0.1425],[352.98,0.1935],[353.44,0.2555],[354.18,0.3083],[354.8,0.192],[362.54,0.192],[364.36,0.32],[372.34,0.32],[374.04,0.0003],[374.14,0.0]],"arr":[],"k":1.0},"mus_ext":{"c":[[0.0,0.0],[4.3,0.0],[5.5,0.4],[9.0,0.4],[11.8,0.0],[350.04,0.0],[350.54,0.0896],[350.74,0.1112],[350.94,0.1243],[351.14,0.1291],[351.56,0.1147],[352.54,0.1888],[353.94,0.3348],[354.96,0.189],[362.54,0.189],[365.06,0.45],[372.34,0.45],[374.04,0.0004],[374.14,0.0]],"arr":[[4.3,2.0],[350.043,0.0]],"k":1.0},"fuego":{"c":[[0.0,0.0],[9.4,0.0],[11.9,1.0],[32.06,1.0],[32.66,0.6033],[32.68,0.6],[48.7,0.6],[50.52,1.0],[54.96,1.0],[55.56,0.6033],[55.58,0.6],[78.04,0.6],[79.86,1.0],[80.8,1.0],[81.4,0.6027],[82.62,0.6],[84.44,1.0],[85.78,1.0],[86.38,0.6033],[86.4,0.6],[116.48,0.6],[117.28,0.1831],[117.3,0.18],[119.84,0.1803],[121.64,0.3],[122.88,0.3],[123.5,0.18],[132.18,0.18],[133.0,0.0625],[134.7,0.1],[140.92,0.1],[141.54,0.06],[161.12,0.06],[162.62,0.5993],[162.64,0.6],[168.18,0.6],[168.2,0.5958],[168.68,0.3438],[169.0,0.2005],[170.5,0.3],[171.44,0.3],[172.06,0.18],[173.92,0.18],[175.72,0.2999],[187.86,0.3],[188.48,0.18],[191.32,0.1804],[192.72,0.2737],[193.34,0.18],[207.38,0.18],[208.88,0.6],[346.44,0.6],[348.24,0.9995],[349.54,1.0],[350.78,0.505],[350.96,0.3846],[351.1,0.2997],[351.24,0.2252],[351.38,0.1612],[352.04,0.0006],[374.14,0.0]],"arr":[],"k":0.3162},"mus_dentro":{"c":[[0.0,0.0],[9.7,0.0],[12.7,0.5],[31.8,0.5],[31.82,0.4985],[32.82,0.21],[48.46,0.21],[49.06,0.0417],[49.08,0.0404],[51.22,0.08],[54.7,0.08],[54.9,0.0714],[54.92,0.0724],[55.12,0.1271],[55.3,0.1597],[55.5,0.1774],[55.72,0.1756],[55.92,0.21],[77.64,0.21],[77.66,0.2079],[78.16,0.0356],[80.54,0.0797],[80.64,0.076],[80.96,0.147],[81.1,0.1664],[81.24,0.1776],[81.56,0.126],[82.54,0.1248],[82.94,0.0393],[85.12,0.0797],[85.42,0.08],[85.44,0.0821],[85.54,0.1237],[85.64,0.156],[85.84,0.2059],[86.06,0.2382],[86.26,0.2472],[86.42,0.2403],[86.54,0.21],[116.48,0.21],[117.3,0.0],[161.12,0.0],[162.64,0.21],[168.18,0.21],[169.0,0.0],[207.38,0.0],[208.88,0.21],[210.64,0.21],[211.66,0.0924],[267.22,0.0924],[268.74,0.21],[320.0,0.21],[320.82,0.021],[330.7,0.021],[331.22,0.0838],[333.82,0.0],[374.14,0.0]],"arr":[[9.7,0.0]],"k":1.0}}}},"rec":{"fuego":{"dur":30.0},"latido":{"dur":12.0},"capa_viento":{"dur":18.0},"capa_pajaros":{"dur":18.0},"capa_agua":{"dur":18.0},"capa_hojas":{"dur":18.0},"capa_reloj":{"dur":16.0},"grito":{"dur":1.6},"radio_r":{"dur":26.0},"voz_iago":{"dur":1.343},"estatica":{"dur":22.0},"estatica_am":{"dur":22.0},"radio_boton":{"dur":0.523},"radio_dial":{"dur":2.981},"aplauso":{"dur":5.3},"golpe":{"dur":0.9},"flauta_p01":{"g":0.72122,"dur":5.577},"flauta_p02":{"g":0.46719,"dur":5.577},"flauta_p03":{"g":0.51705,"dur":5.577},"flauta_p04":{"g":0.40133,"dur":5.577},"flauta_p05":{"g":0.24666,"dur":5.577},"flauta_p06":{"g":0.14456,"dur":5.577},"flauta_p07":{"g":0.11559,"dur":5.577},"flauta_p08":{"g":0.09041,"dur":5.577},"flauta_p09":{"g":0.03186,"dur":5.577},"flauta_p10":{"g":0.04313,"dur":5.577},"flauta_p11":{"g":0.01556,"dur":5.577},"flauta_p12":{"g":0.00991,"dur":5.577},"flauta_p13":{"g":0.00708,"dur":5.577},"flauta_p14":{"g":0.00637,"dur":5.577},"flauta_p15":{"g":0.00567,"dur":5.577},"flauta_p16":{"g":0.00354,"dur":5.577},"cage_00":{"dur":1.456,"nombre":"gong grave"},"cage_01":{"dur":0.33,"nombre":"tambor sordo"},"cage_02":{"dur":0.184,"nombre":"golpe hueco"},"cage_03":{"dur":0.154,"nombre":"tambor"},"cage_04":{"dur":0.362,"nombre":"madera y campana"},"cage_05":{"dur":0.185,"nombre":"caja"},"cage_06":{"dur":0.154,"nombre":"madera seca"},"cage_07":{"dur":0.154,"nombre":"timbal"},"cage_08":{"dur":0.164,"nombre":"campanilla"},"cage_09":{"dur":0.176,"nombre":"chasquido"},"cage_10":{"dur":0.842,"nombre":"campanas"},"cage_11":{"dur":3.206,"nombre":"gong"},"cage_12":{"dur":3.606,"nombre":"acorde final"},"cage_frag":{"dur":18.45},"plato":{"dur":3.2},"piano_E2":{"dur":3.129},"piano_E3":{"dur":3.129},"piano_B3":{"dur":3.129},"piano_C4":{"dur":3.129},"piano_E4":{"dur":3.129},"piano_Ab4":{"dur":3.129},"piano_A4":{"dur":3.129},"piano_B4":{"dur":3.129},"piano_D5":{"dur":3.129},"piano_E5":{"dur":3.129},"piano_A3":{"dur":3.129},"cama_valle":{"dur":117.335},"cama_mus_ext":{"dur":178.4},"cama_mus_dentro":{"dur":360.0},"oboe_A4":{"g":0.2959,"dur":2.5},"clarinete_A4":{"g":0.40138,"dur":2.5}},"fondos":{"vacia":{"estados":[0,3,7]},"radios":{"cajas":[{"x":235,"y":0,"w":289,"h":179,"r":[284,0,475,125]},{"x":467,"y":0,"w":298,"h":179,"r":[516,0,716,125]},{"x":717,"y":0,"w":291,"h":179,"r":[766,0,959,125]},{"x":972,"y":0,"w":271,"h":179,"r":[1021,0,1194,125]},{"x":1210,"y":0,"w":269,"h":179,"r":[1259,0,1430,125]},{"x":1435,"y":0,"w":339,"h":179,"r":[1484,0,1725,125]},{"x":230,"y":165,"w":298,"h":234,"r":[279,214,479,345]},{"x":472,"y":165,"w":302,"h":234,"r":[521,214,725,345]},{"x":715,"y":165,"w":295,"h":234,"r":[764,214,961,345]},{"x":960,"y":165,"w":323,"h":234,"r":[1009,214,1234,345]},{"x":1226,"y":165,"w":298,"h":234,"r":[1275,214,1475,345]},{"x":1465,"y":165,"w":300,"h":234,"r":[1514,214,1716,345]}],"orden":[6,0,9,3,7,11,1,4,10,2,8,5]}},"test":{"2.1":{"titulo":"Cualidades del sonido (duración e intensidad)","preguntas":[{"q":"El sonido es una vibración que se propaga como…","op":["Ondas mecánicas a través de un medio","Ondas electromagnéticas en el vacío","Partículas de luz"]},{"q":"Una reflexión del sonido inferior a 50 ms se percibe como…","op":["Reverb","Eco","Difracción"]},{"q":"Una reflexión superior a 50 ms se percibe como…","op":["Eco","Reverb","Refracción"]},{"q":"La capacidad del sonido de atravesar los materiales se llama…","op":["Refracción","Reflexión","Difracción"]},{"q":"Que el sonido gire esquinas o se cuele por huecos minúsculos es la…","op":["Difracción","Reflexión","Reverberación"]},{"q":"La unidad objetiva para medir la intensidad es…","op":["El decibelio (dB)","El hercio (Hz)","El forte"]},{"q":"Para que una sala suene seca (rebote mínimo) se usan materiales…","op":["Absorbentes (cortinas, paneles)","Aislantes muy pesados","Metálicos y duros"]}]},"2.2":{"titulo":"Cualidades del sonido (altura y timbre)","preguntas":[{"q":"La altura del sonido se mide objetivamente en…","op":["Hercios (Hz)","Decibelios (dB)","Milisegundos"]},{"q":"Los hercios indican…","op":["El número de oscilaciones por segundo","La presión sonora","La duración del sonido"]},{"q":"La frecuencia de resonancia del La4 (afinación estándar) es…","op":["440 Hz","220 Hz","4000 Hz"]},{"q":"El límite inferior de la audición humana está en torno a…","op":["20 Hz","2 Hz","200 Hz"]},{"q":"El timbre es la cualidad que permite…","op":["Distinguir un instrumento o voz de otro","Medir el volumen","Saber la duración"]},{"q":"El timbre se determina por…","op":["Las intensidades relativas de los armónicos","La frecuencia fundamental sola","El número de decibelios"]},{"q":"La misma nota en dos instrumentos distintos: sus armónicos…","op":["Están en los mismos lugares; cambia su proporción de intensidad","Son totalmente distintos","Desaparecen"]},{"q":"Un sonido es \"puro\" (sin armónicos) solo cuando…","op":["Se sintetiza artificialmente","Se toca en un piano","Lo canta una persona"]}]},"2.3":{"titulo":"Serie armónica","preguntas":[{"q":"Al tocar una nota, en realidad escuchamos…","op":["La fundamental y sus armónicos","Un único sonido puro","Dos notas exactamente iguales"]},{"q":"La serie armónica que estudiamos se acota a los…","op":["8 primeros sonidos","3 primeros sonidos","12 primeros sonidos"]},{"q":"El código de la serie se refiere a intervalos…","op":["Siempre ascendentes desde la fundamental","Siempre descendentes","Aleatorios"]},{"q":"En la serie de un Mi, las posiciones 1, 2, 4 y 8 son…","op":["La misma nota (mi)","Notas todas distintas","Silencios"]},{"q":"Un tambor suena \"indeterminado\" porque…","op":["Produce tantos armónicos que el cerebro no los ubica","No tiene ningún armónico","Suena demasiado grave"]},{"q":"El intervalo entre la fundamental y el 2.º armónico es una…","op":["8ª (octava)","5ª justa","3ª mayor"]}]}},"rev":"10072009","oboe":{"f0":440.0,"M":837,"P":512,"K":12,"vuelta":1.89812,"f_grab":440.962,"dev":"AAAZBJwHtAp1DeEP5hFrE1UUixT5E5ISSxAiDRkJOgSU/j/4V/H56UXiWtpS0kPKQMJYupyyHKvvoy+d/JZ1kbmM5IgMhjyEdoO3g/KEFYcKireNBJLjlk2cTKLyqFSwgbhswezKr9RN3lLnYe9E9vb7nwB3BL0Hnwo1DX4PbBHlEs0TChSFEysS7Q/EDLAIuwP6/Yr3i/Ag6WnhhNmK0Y3JmsG9uQGydaoyo1mcDpZ6kMKLA4hShbeDL4OwgyaFeYeOikiOk5Jhl7ecpKJGqbiwBrkdwsPLndU23x/oAfC09j/8zwChBO4H3Qp+DcsPsBERE9QT4RMnE5gRKw/dC68HrQLp/H32hu8j6HPgktiX0JPIl8CxuPCwa6k7ooGbX5X6j3GL4IdUhdWDXYPhg1KFnIerimiOwZKqlyedRaMdqsSxQbp7wzPNCdeI4ELp5vBU95/8/ACtBOwH3QqKDecP2BE9E/gT8hMZE2QR0A5cCw8H9gEn/Lz10O6A5+bfHNg00EDITsBtuK6wJantoSab9JR7j+CKQ4e6hE+DAoPBg3eFBohNizKPnZOHmPWd/KO9qlKyxLr7w7fNkdcU4c/pd/Ht90f9uAF7BcYItQtPDogQShJ9EwkU3RPoEiERgg4JC7oGogHS+2P1be4K51XfZddRzy7HE78Vt0uvy6evoBGaEpTRjnGKDIe3hHmDToMohO6FhYjPi7SPI5QZmaGe0KTBq4ezIbxuxSjP69hJ4tnqVfKm+OD9OALpBScJDgymDt0QnBLEEz0U8xPZEukQHw59CgsG1ADs+mr0aO3/5UveYtZZzkLGML40tmiu6abXn1KZeJNljjOK+obJhKuDmoOLhGWGDolpjF6Q3pTkmX2fvaW9rI+0ML19xjHQ6Nky46jrB/M8+V7+nQI3BlsJKAymDsoQfRKjEyEU3xPOEuIQFA5kCtYFdwBc+qDzZezN5PrcCNUNzRjFM71ptcytcqZ3n/yYI5MNjtmJoIZ2hGGDYYNohF+GK4msjMaQZZWEmi6ge6aHrWe1Gr54xzfR7dok5HfsqPOp+Zv+tgI5BlQJIAydDrsQYhJ1E94TjBNvEn8Qsg0FCnoFHQAB+kPzBexn5Irch9RzzF/EWrx2tMisaqV3nhCYU5JfjVOJRoZIhF6DgoOihKWGbonkjPGQjJW4moSgBadTrne2Yr/nyLLSWdxs5Y7tifRb+iv/NgO4Bt4JuQxDD2URARP7Ez0UtBNXEh4QCA0WCVME0f6p+Pbx0upV45TbpNOZy4fDhbuoswWstaTRnXSXv5HSjM2IzYXhgxGDVYOZhMKGs4lOjX6RNpZ5m1Wh4aczr1W3OcCvyWrTAt0L5i3uNPUb+w==","dev_e":2.1209280180670134e-05,"amp":[["l3oFe8d63Xl+ePR2fHU8dEFzmnJRclRybXJDcn9x8m+ybRRrhmhqZvZkMWT0YwNkF2TyY3hjv2IJYqRhv2FbYldjiWTVZTBnqGhcamJsqm7zcPJyc3Rsde51D3bmdY11N3UjdYJ1X3aUd+V4GXoLe6R70Ht/e7h6n3l6eJN3GHcHdyl3IXeTdld1j3OYcdVve253bYxsh2tmallplWgkaNdnYWeFZj9l1mO0YjpimGK4Y15lRGcxafRqZWxvbSpu2m7Wb2BxgnMCdnp4h3rxe7V88nzTfG18u3u3enR5L3g3d8d26HZsdw54hXideEt4qHfidiR2gHX0dGl0wXPhcrlxRXCHbpFshmqeaBhnLWbuZT9m3WaEZwJoRmhUaD9oIGgNaBpoVmjWaK1p7WqRbHJuQ3CqcXFyqnKucvJyznNUdT93C3k4eol6KHqHeSF5PHnMeYN6/Hrvekh6L3nyd912GnafdT51uHTjc8Nyh3FucJ9vF2+1bkpuqm2xbFprxWkzaOZmCmahZZBluGUHZnRm+maLZyJoyWiZaaFq5GtKbaRuvm+CcAVxcXHtcYVyJXOycxp0ZXSydC51/XUld4R423nlenJ7dHsDe1J6m3n6eGR4rXeodkd1o3PscU1w4m62bcBs32vjaq5pSGjcZqVl0mRrZFFkP2TmYxJj0WF+YJ1foV+5YL5iUmUPaKJq2GySbsJvbHClcJtwjXC6cFJxa3Lyc7d1gXcmeZN6vHuRfAB9+HxxfG97DnqQeFN3qnardhx3i3ePd/t28HXBdMNzHHO9cnNyA3I6cQZwem7HbC9r2mnLaORn/Wb9Zepk3mP+Ym5iVWLWYghk6WVPaOJqNG3ebqlvnG8Db1puJ269bh1wAHL2c5N1lnb+dhB3MXe9d9F4P3qie4h8o3zke4R64nhcdyB2IHUodAZzqnE2cOhu9m1rbSdt9GypbC1sdGuAamlpVGhmZ7NmMmbLZWNl7mRyZAJkwWPeY4pk32XKZw5qTmw1bpNvanDjcENxznG5cg90rXVJd5Z4Znm8ecx50XnteRh6OHo8ejF6PXp6et16MXsue6N6jHkXeIR2CnXOc+JySXLscZFx5XCgb6dtHGtTaL5lyGPBYsViomPiZPllhmZrZtVlIWXBZBZlUGZkaBRr/m28cAJzr3TRdZJ2Jne3d194IXneeV16ZHrgefp4EXiXd9N3vHj3ef16YHsBeyF6MXmQeE94KnjBd8h2MXUscw1xH2+KbVNsbWvBajdqt2kxaYxos2ekZnxla2SgYzhjNWOIYyZkBmUuZqZnaWlUayFtiW5sb+JvKnCNcD5xV3LVc6J1k3diebx6X3s3e3J6b3mkeGp42Xi4eQ==","NnrleVZ513ioeOB4bnkhesF6J3tFeyd773rIetR6H3uPe/R7FHzJewx7/3nZeM53BHeIdlZ2XHaEdrx2AXded+d3rXivedF64nupfAB94HxhfKx763o3epd5BnlveMJ3+3YqdnZ1EXUldcR1z3YBeAJ5j3mbeVN5AnnweDt50Xl8evp6GXvOejB6d3noeL54EnnTecd6lXvue6Z7zHqdeWp4fHf7dux2MHeWd+p3DngEePF3Cnh/eFt5enqWe158mXwzfEt7K3oseZR4c3iheNF4vXhNeJx38XaVdrR2R3cPeLh4AnnieI54VXh8eBd5B3oPe+x7Z3xifNp78Xrjef54gXiGePJ4eXm9eX15t3ild5x243WWdad17XU+doJ2u3YAd2l3BXjLeJ15WnrtelZ7mnu0e5F7HXtXelx5XXiGd/N2q3ardut2Ynf+d554G3lWeUR5/XiyeJp42HhjeQt6kHrGeqh6WXoLeuN56XkJeil6NXorehZ6Anrxedt5rnlbeeN4VXjJd1p3HHcXd0d3oHcTeJF4EXmMefl5UHqIept6iXpSevZ5fHn1eHx4KXgGeAZ4CXj4d9h3xnfqd1Z4+HijeSh6a3pzemJ6XXp3eqp623roesB6aHr8eaF5dnmJec55Jnplel168nkpeS14Pneedml2kXbodjZ3WndXd093bHfHd1x4DXm3eUN6pXrhev56A3v2et56vnqTelB65XlGeXp4mnfOdkN2FnZMdtR2i3dGeOF4RXlyeX55g3mTebN533kPejt6V3pWejJ6AXrneQt6d3oNe4p7pXswezR673i2d9l2h3a/dl13IXjIeCd5MnkBecR4rHjVeDx5wHlAeqp6+Xowe0l7M3vfekh6fHmTeKx35nZedip2VXbTdoN3MXineL54dnj4d4R3V3eMdxt41niGefp5HXr6ebN5dHlkeZZ5/Xl0esR6vnpJenF5ZHhcd452G3YLdk12tnYWd0N3OXcadyF3h3dieJh56HoHfMB8/HzJfEV8mXvhei56e3m8eOl3D3dQdtp12HVcdlN3g3iaeVB6gHpCetp5mHmueR16unpGe4t7Z3vgeht6VHnJeKR46Xh8eSJ6nXq2elt6pHnFeAR4nHendxl4vnhXea95vHmWeWt5ZnmYefd5Z3rIegl7KHspewx7ynpaerp583gfeFd3snY+dv119HUsdq52gXeNeKB5fHr5ehl7/XrSerh6tnq6eqR6WnrWeS55i3gaePZ3GnhheJl4mnhaePZ3k3dSdzx3SXdod4x3rXfJd95373cFeCt4aXi9eB15eHnBefV5G3o0ejJ6/nmDeb94yHfJdvF1ZnVBdYh1N3Y3d1t4Y3kOeg==","nXbTdp12UHYvdld2yXZudyJ4wngxeV55RXnxeHp4+Xd6d/h2XnaVdZF0V3P8cZhwPG/ybbpsm2uiavBpqmnsab5qEWzFbbRvvXHFc7x1mHdPedB6+3udfHt8YntMeWt2MHMzcBNuQm3gbaZv+HEkdK11bXaSdnF2WnZ/dup2jXdGePJ4eHnEedF5mnkieXV4pHfJdvV1LHVfdHhzaXIwceBvkW5gbV9slWsCa6ZqiGq1akNrRGzBba9v8HFYdLR21HiUetx7n3zRfGF8NntDeZ52kHOecGluem0Hbs5vK3JgdOB1hHZ8dix283UOdol2SHcZeM94TXmJeYp5XnkWecB4Ynjxd1N3a3YvdapzAHJZcNpumG2ZbNRrOmvBanFqZWq9ao1r1Wx8bmBwYHJmdGF2Qnj6eW97gHwAfb58kntzeZJ2WXNicE1ukm1KbiFwcXKJdPh1qnbVdsh2x3bwdkd3v3dBeLp4FHlBeTV59XiMeAt4hHf7dmh2tXXOdKtzVHLecGNv+225bK5r42pfai1qVmrmauBrP230bupwCXMydUJ3GHmder97cHybfBt80XqyeOV1xnLmb+VtQG0YbhhwjnK6dBx2m3Z5diB27nUWdp12Y3c8eAF5lnnpee95o3kReU54eXendtx1CHUXdPtyt3FYcPJul21ZbE1rhmoUagdqZmova1hszW13b0NxIHP8dMR2ZnjRefJ6qnvRezx7z3mUd8Z00HFBb6RtVm1bbk9wj3J7dLh1P3ZIdh92BHYjdox2O3cYeP54xnlNenh6P3qveeZ4B3gpd0x2ZXVldEJz/3GicD1v4W2nbKBr22phaj5qfWolay9sjW0tb/5w83L7dP122XhweqF7SnxJfIB75nmPd7x02HFob+ttrm2sboRwnXJtdKl1UHaXdrp243Yld4d3B3ifeD55ynkkejR673lgeZt4unfQdud1+nT5c9Zyh3EScIluBm2ra5NqzmllaV1pummCarZrSW0mby9xRHNIdSl33HhWeoR7QnxdfKR7+3lyd1h0LnGSbhZtCW1Ybopw8nL1dEB21Xbvdtp20Xb0dkx30Xd7eDt583l6eqF6THqBeWh4O3cqdkx1mHTucyNzGXLEcDZvmW0fbPJqLmrdaQNqm2qXa+NsbG4icPtx53PSdaJ3PnmReol7DXz6eyt7h3kedzF0OXHNbn1tmW0Jb01xsXOddcp2SHdYd0B3MndEd3534XdoeAN5knntefR5nHnzeBd4LndRdoR1uHTTc71yaXHlb1Nu42y7a+xqcmpDallqumpza4ts/m2+b7NxvnO9dZR3MHmHepF7NHxEfIh73XlQdzF0EHGZbl9tpm0/b5dx73OwdQ==","hFqoXPBd2V7DX9RgAWI3Y3NkzGVYZxJp12p0bMVtv258bzxwUXH1cjB1xndGeil8AH2XfAl7uXg8dil06HKWcg5z+3PwdHN1FHWPc+BwQ20RaaBkKGDHW35XQVMHT+ZKLEdpRFFDckTjRxtNCFN2WHtcu15tXy1fsl6MXgJfFWCnYZJjumUIaFlqe2wyblFv2W8PcGNwQXHacgt1a3d4ecB6Cnthegh5Y3fXdbB0F3QMdGR01HQGdbN0tnMCcphvdmyeaCdkTF9jWsZVt1FKTmhL+UgNR/xFQ0Y8SMdLRlDfVM1YoVtFXe1d8128XapdEV4kX+RgLmPPZZ1oemtKbuZwInPhdDB2P3dIeG15oHqoezN8AHwAe2h5lHfedXV0UHNUcm5xnHDebypvYW5Wbdtry2kZZ8pj8l+2W0NXvVI6TtJJ00XaQrtBKUNFR09N21NhWdpcEF6MXUBcHlvXWr9byV2cYLZjnmYJae5qc2zabWFvJnEfcxN1rXagd9F3dHfvdqx21HY/d4x3WneBdh11enPscbBw3m9qbyhvzW4FbpBsTmpDZ41jU1/CWgJWLVFeTNBH90N7QQFB3ULiRlhMO1KTV79bil4jYOtgTGGQYd1hN2KZYhBj0mMqZUxnLGpybZVwDnOTdCV1BXWVdDh0MHSYdFp1MHa3dpR2pnUOdChyXnANb2JuU26dbtVuhW5cbU1rkWiKZYNiil9eXJpY9VODTs9IxkNsQI8/ekHURaxLwlH9Vr1a7VzdXQhe9l0cXs1eImDxYeVjsmVEZ8JobGpmbJdusXBecnNzB3RddLl0N3W+dRd2DnaRdcd0/nN7c1JzXHNSc/xyTHJTcSVwuG7ybLlqBWjmZHVhxV3VWY9V41DhS9FGR0IVPxA+uj/rQ8xJIVDOVStaF13RXrlfJmBZYItg8WC8YRdjFmW0Z9BqJm5ecR50KXZ+d0N4rHjbeNt4tXh6eEd4NXhReJJ42HjweKJ4yXdrdrh0+3JqcQtwsm4obUVr/GhKZihjiF9dW65WolGCTMNHA0T5QT9CB0XiSdhPvlWiWvxdsl8HYHlfql4zXn9er1+RYcBj12WiZyxppmo7bPVttW9RcahywHO9dMp1/3ZBeE550XmSeZd4JHeddVp0iXMyczNzRHMBcw5yPHCfbXNq9mZMY4FflluNV2NTD0+bSktGuULAQCBBEUT7SKBOqlNBV09ZX1osWzFcfV3SXu9fxWCDYXdi62P5ZYhoUGsDbmdwaHIcdKt1K3eOeJ95I3rtefd4aXeRdd1ztXJUcqdyY3MsdLp06HShdNVzanJGcFxtvGmSZRdhgVzzV3JT7k5iSgdGaUJLQFtA00JOR+BMcVIhVw==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ==","d1+MYTJiN2JiYkxjRWVEaPtr+G/Dc+p2A3m6eeN4g3bCcudtUWhwYsRcylfqU2ZRV1C3UGhSLVWvWI1cemBWZC5oHWwPcKFzG3aidnZ0O28aZ8FcTFEMRkI81DQXMNUtnC0cL2EyoDfSPllHAFBrV7hc3V99YYNio2MuZSRnXWm2ayhuyXCwc8t2ynkSfNp8dHuld9Nx6GoCZA9eill8VqlUy1O/U3hU+VU/WEVbBF9oY09odW1kcml2qnhQeMB04G05ZN1YKU1kQoE57TKULh0sTytYLMYvDzb1Pi1JvVLfWd1dTl+kX2FgeGIAZmRqwG5Hcoh0e3Vtdcl053PwctNxYXBibrVrX2iIZGdgO1w9WLFU61FHUB9Qp1HMVCpZKF4zY/FnTmw+cHVzSnXhdIZx/2q1YaRWH0uWQEI42jJUMAgwHjEdMys2yDoyQeZIqlAVVzZb9lwHXZBcsVwbXvJg5WReabZtWnHwc151xHVpdZZ0cHPccYpvMWzBZ35i91zfV9lTTFFNULNQPlLAVCNYWlw/YYxm5mvecOh0SXcsd+VzSm3bY7VYTU0JQ+U6OjXWMUAwFTBTMVo0ojkyQUFKSVOlWlNfWmGhYW5h0mFRY+plSWkFbbZw/nOKdht4knj5d3R2KHQdcUFtkWhOYwhedVknVlZU5lOLVOJVk1duWYdbMV7HYWxm1GtAcaF113frdmByXGq6X9hTRkhmPhM3cTICMBEvPC/IMHQ03DrIQ/dNilfmXlpjPWV6ZRpl7GRzZfdmimkTbUJxkXVbefx7AH08fM55BnZOcRRssGZqYYBcM1jMVJBSr1E0UvpTtlYZWvNdO2LwZvZr6nAddaR3lHdUdN5tzWQ3WmlPl0WMPXY38TJeL28siirAKkwu1jXUQHBNJVm7YS9m9GaSZeFjVGOXZJ1n2WuEcM50EHjseVh6nXkweHl2mnRfcm1vkGv7Zj5i/12pWkxYulbPVZpVWVZPWKFbQGDpZSVsRXJod5Z69noOePBxN2nZXuZTW0n8P0s4gDKkLrEsviwOL98zGTsFRDtNElVOWsRcVl1qXTdeUmCfY5RnkmspbytyjnRCdiR3GHccdkJ0k3EIbp5pfWQWXxVaHlaLU1ZSMFK/UsJTKlUcV9xZrV2nYp1o+G67dKV4jHm9djJwnWY+W41P7ERPPA423zEnL28tyCzmLb4x1TiqQq9N2VeBXwBkwWXZZYNlrWXNZuVor2vKbt9xrnQUdwJ5ZXoNe6V6zXg+dfxvb2laYrRbbFYZU9RRSlL7U3RWbFnJXJFg02SMaZJuiHPYd7B6KXt8eFpyGGmzXYtRC0ZPPPM0DTBLLTosrCzdLkUzGDrVQjlMwFRLWw==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ==","K3M3dHV0VHQ7dHJ0E3USdkt3nXjreRN77ntWfDF8entGerh4AndTddRznnK3cRJxmnA4cOZvrG+lb+1vmnCycTBz/nTydst4NnrmeqZ6Z3k8d1d0/3CEbS1qJmeCZEVihGB9X4tf/WDeY9FnHmz3b8ByTHTRdMN0n3S9dER1LnZZd5942nn0etp7gHzUfL18JnwNe5B55XdIduZ00nP+cktynnHycFlw8W/ebzpwEHFdcgt0+3X7d8d5Dnt+e956Inlvdh5zm29LbHBpH2c/Za1jXWJ8YWlhhWLsZEdo5GsFbzFxYHLncjtzvnOcdMl1HXdneH15SXrLeg57JXsce/R6pXofelR5RngAd5x1NnTocsBxx3AKcJtvjG/lb5hwinGgcs9zFnVxdsJ30HhVeQ551HeodbFyP2+8a5BoAmYgZMZiz2FFYXJhvGJRZeto0WwrcFpyOXMXc4dyIHJIciNzk3RSdgx4eXlxevB6E3sGe+162Hq3emJ6qXlseLF2qXSncvxw2W9Dbx9vRm+kbzlwEXE0cppzM3Xidnl4tXlDett5WXjVdZlyDm+da4ho52WuY81hV2COX9lfjWGxZNdoNG3vcHlzvHQNdfR08XRJdf917Hbfd7N4XnnpeV56vnr+egp7w3oPetp4LHcxdTFzfnFRcLdvi2+Qb4hvV28Rb/JuR29KcAFyPHSddrN4DXpXemp5WndzdCFxzm3FaiJo2GXKY/BhdWDAX01gZ2LtZUBqe27UceNzunS7dGd0MXRjdBl1RXa7d0N5qXrHe4x88nwAfbl8G3wie815K3hZdoN01HJqcVRwmG80byRvZm/xb8Jw03Ejc6t0V3b4d0Z553mSeSt40XXScpdvfWy+aVdnIWXpYqxgr16DXdBd/1/4YwRpE24icp90j3VtdeN0g3SjdFV1eHbRdx95NHr8enl7wXvme+97z3tre6t6gHn2dzh2fXT3csBx3nBPcBFwI3CEcC5xG3JPc810iXZXeOR5znrGeq55o3fpdM5xmm6Aa5to9WWRY4dhEmCTX2pgwmJcZo5qfG5ycStz2XP3cwR0WXQTdSB2WHeReKZ5gXoRe1F7THsVe7V6JHpKeRV4iHbIdBFzpXGrcCpwBnAScCpwQnBpcMNweXGucmZ0fHaceFJ6MXvzeox5KncfdM1wjm2caglov2WcY5ph718WX5hfx2F1ZfRpVW7Ncf1z/HQ4dTF1THW4dXF2WHdHeCJ53Hl0eu96TXuGe4R7MHt3elR513cgdlp0sXJIcTNwd28WbxNvdG85cFxxz3KDdGJ2TngTemh793t7e9x5Pnfzc2Nw7WzNaRxnz2TNYhBhw19CX/pfJGKUZbZpwG0FcQ=="]],"amp_e":[[2.8556694827865285e-07,9.424470200486602e-07,2.511554355295003e-06,2.6651857293171606e-07,4.907923592823173e-08,1.729907753395407e-07,6.849642786246558e-08,1.1418990556589436e-08,9.092332762847757e-09,9.574427963625357e-09,5.456634067731299e-09,5.950606677591652e-09]],"fase":[[2.0211,0.1715,2.2742,1.2426,1.2474,0.3086,-1.006,0.0,0.0,0.0,-2.5185,0.0]],"ob":[0.008233,0.029215,0.074654,0.007006,0.001437,0.004227,0.002006,0.000334,0.000266,0.00028,0.00016,0.000174],"cl":[0.035926,0.000152,0.033459,0.007833,0.022092,0.004178,0.008652,0.002685,0.000841,0.000974,0.000154,4e-06],"gan":[4.36366,0.0052,0.44819,1.11803,15.37096,0.98832,4.31358,8.03054,3.15904,3.473,0.96069,0.02062],"G":{"ob":1.7687,"cl":2.5397},"vol":{"oboe_A4":1.686,"clarinete_A4":2.5365},"propios":[1,2,3,4,6]}});
 </script>
 </body>
 </html>
