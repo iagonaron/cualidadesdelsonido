@@ -1,6 +1,6 @@
 LA CABAÑA · Acústica (2.º GP) · página interactiva de PRUEBA
 ================================================================
-Montada por Claude (conversación «La cabaña», octubre de 2026). Esta copia: 07-10-2026 20:09, revisión 10072009.
+Montada por Claude (conversación «La cabaña», octubre de 2026). Esta copia: 08-10-2026 10:05, revisión 10081005.
 
 QUÉ ES
   prueba.html y esta carpeta, cabana/, son la versión interactiva de «La cabaña»: la historia en tres días de clase (1 · El silencio,
@@ -46,7 +46,9 @@ LAS DOCE RADIOS (Día 2)
 DE OBOE A CLARINETE (Día 3)
   Suena la grabación del oboe (el mismo La 4 del vídeo) partida en sus doce armónicos; al convertirla, lo único que cambia es el volumen de
   cada armónico, hasta lo que vale en la grabación del clarinete. Las barras son el dibujo simplificado del vídeo. El modelo lo calcula
-  transforma.py (en las fuentes) y viaja dentro de prueba.html; a/oboe_A4.mp3 y a/clarinete_A4.mp3 son las grabaciones tal cual, para comparar.
+  transforma.py (en las fuentes) y viaja dentro de prueba.html; a/oboe_A4.mp3 y a/clarinete_A4.mp3 son las grabaciones, para comparar.
+  (Versión 3, 8-oct: el oboe va SIN VIBRATO, aquí y en el vídeo, como el clarinete: el ataque de la grabación y después sus armónicos quietos.
+  Oboe y clarinete suenan igual de fuertes medidos en sonios —la sonoridad que percibe el oído—, no solo en LUFS.)
 
 EL PIANO PREPARADO (Día 3) Y LA GRABACIÓN DE CAGE
   a/cage_frag.mp3 son 18 segundos de la Sonata V de «Sonatas e interludios» (John Cage) y a/cage_00 … cage_12.mp3 son trece notas sueltas
