@@ -4,6 +4,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
+<!-- LM at home · SELECCIONADOR DE VOLUNTARIOS (14-oct-2026, Claude para Iago). Solo con la cuenta Protester: el medallero de
+     gp.lmathome.es abre este portal con «#c=<cuenta>»; aquí se quita de la dirección, se guarda en este navegador y se carga
+     el seleccionador de https://gp.lmathome.es/voluntarios/ (botón «Voluntarios» arriba a la derecha, activo en la hora de clase).
+     A los alumnos no les hace nada. Quitarlo de este portal: borrar este bloque (y su regla #bVoluntarios del CSS). -->
+<script>
+window.LM_VOL_CONFIG = function () {
+  return {
+      portal: 'acustica', tema: 'radio',
+      boton: { padre: '#mandos', antes: '#bPausa', despues: true, clase: 'bot', id: 'bVoluntarios' },
+      // si un tramo de la historia está corriendo, se pone en pausa (al cerrar la ruleta, «Seguir» como siempre)
+      alAbrir: function () { try { var p = document.getElementById('bPausa'); if (p && p.classList.contains('hay') && !document.body.classList.contains('pausa')) p.click(); } catch (x) {} }
+    };
+};
+(function () {
+  try {
+    var m = /(?:^#|&)c=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i.exec(location.hash || ''), c = null;
+    if (m) {
+      c = m[1].toLowerCase(); try { localStorage.setItem('lm_vol_cuenta', c); } catch (e) {}
+      try { var h = location.hash.replace(/^#/, '').split('&').filter(function (p) { return p && !/^c=/.test(p); }).join('&');
+            history.replaceState(history.state, '', location.pathname + location.search + (h ? '#' + h : '')); } catch (e) {}
+    } else { try { c = localStorage.getItem('lm_vol_cuenta'); } catch (e) {} }
+    if (!c) return;
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'https://gp.lmathome.es/voluntarios/lm-voluntarios.js?h=' + Math.floor(Date.now() / 36e5);
+    s.onload = function () {
+      var ir = function () { try { if (window.LMVoluntarios) window.LMVoluntarios.monta(window.LM_VOL_CONFIG()); } catch (e) {} };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ir); else ir();
+    };
+    document.head.appendChild(s);
+  } catch (e) {}
+})();
+</script>
+<style>
+/* (14-oct-2026) el seleccionador de voluntarios: solo con la cuenta Protester (el botón lo crea lm-voluntarios.js, de gp.lmathome.es):
+   arriba a la derecha, a la izquierda de la pausa y la pantalla completa, con la misma forma que ellos */
+#bVoluntarios{top:30px;right:105px;height:63px;padding:0 24px 0 20px;font-size:18px;letter-spacing:.18em;gap:.65em;opacity:.85;transition:right .3s ease,opacity .2s linear,background .15s linear,border-color .15s linear}
+#bPausa.hay~#bVoluntarios{right:180px}
+#bVoluntarios:hover{opacity:1}
+#bVoluntarios .lmv-ico{width:27px;height:27px;stroke-width:1.5}
+</style>
 <title>Acústica · La cabaña (prueba)</title>
 <link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="icon" href="favicon.ico">
