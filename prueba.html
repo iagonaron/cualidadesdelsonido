@@ -9,6 +9,43 @@
      el seleccionador de https://gp.lmathome.es/voluntarios/ (botón «Voluntarios» arriba a la derecha, activo en la hora de clase).
      A los alumnos no les hace nada. Quitarlo de este portal: borrar este bloque (y su regla #bVoluntarios del CSS). -->
 <script>
+/* (16-oct-2026, Claude para Iago) LOS DÍAS SE ABREN EN CLASE. Iago: «si es el día 1, les aparecerá ya destapado el portal
+   interactivo, pero solo con acceso al día 1… y que cuando vuelva a la portada… no te deje ir al día 3 porque todavía no
+   lo desbloqueé». El portal de gp.lmathome.es (la medalla y el aviso «La cabaña · Día N» de la campana) abre esta página
+   con «#cu=<cuenta>&dias=1.2» (y «&dia=2» desde el aviso de ese día): aquí se quita de la dirección, se guarda en este
+   navegador y la portada solo deja entrar en esos días (los demás, con su candado: «se abre en clase»). Los días los
+   decide Supabase (suite_hitos_de: lo marcado en el Diario y el final de cada clase).
+   Sin cuenta de alumno guardada (el profe, que entra con su «#c=»; el ordenador de clase; quien llega por la dirección
+   sin más): todo abierto, como hasta hoy. Quitarlo: borrar este bloque (lo demás pregunta por window.CabHitos). */
+(function () {
+  var K = 'lm_cab_hitos', st = null, ir = 0;
+  var UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  try { st = JSON.parse(localStorage.getItem(K) || 'null'); } catch (e) {}
+  try {
+    var ps = (location.hash || '').replace(/^#/, '').split('&'), q = {};
+    ps.forEach(function (p) { var i = p.indexOf('='); if (i > 0) { try { q[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1)); } catch (e) {} } });
+    if (q.c && UUID.test(q.c)) { st = null; try { localStorage.removeItem(K); } catch (e) {} }          // el profe (cuenta de pruebas): todo abierto
+    else if (q.cu && UUID.test(q.cu)) {
+      var d = String(q.dias || '').split(/[.,]/).map(Number).filter(function (n) { return n >= 1 && n <= 9; });
+      if (d.length) { st = { cuenta: q.cu.toLowerCase(), dias: d, en: new Date().toISOString() }; try { localStorage.setItem(K, JSON.stringify(st)); } catch (e) {} }
+    }
+    if (/^[1-9]$/.test(q.dia || '')) ir = +q.dia;
+    if ('cu' in q || 'dias' in q || 'dia' in q) {
+      var resto = ps.filter(function (p) { return p && !/^(cu|dias|dia)=/.test(p); }).join('&');
+      history.replaceState(history.state, '', location.pathname + location.search + (resto ? '#' + resto : ''));
+    }
+  } catch (e) {}
+  var ab = (st && Array.isArray(st.dias) && st.dias.length) ? st.dias.map(Number) : null;   // null = todo abierto
+  var todos = function () { return [1, 2, 3].every(function (n) { return ab.indexOf(n) >= 0; }); };
+  window.CabHitos = {
+    activo: function () { return !!ab; },
+    abierto: function (d) { d = +d; if (!ab) return true; return (d >= 1 && d <= 3) ? ab.indexOf(d) >= 0 : todos(); },   // el repaso (el test), con los tres
+    cerrados: function () { return ab ? [1, 2, 3].filter(function (n) { return ab.indexOf(n) < 0; }) : []; },
+    ir: function () { var n = ir; ir = 0; return n; }       // el día del aviso («&dia=2»), una sola vez
+  };
+})();
+</script>
+<script>
 window.LM_VOL_CONFIG = function () {
   return {
       portal: 'acustica', tema: 'radio',
@@ -136,6 +173,11 @@ body.pausa #pausa{opacity:1;pointer-events:auto}
 .pBot small{display:block;font-size:.62em;letter-spacing:.3em;opacity:.8;margin-bottom:.55em}
 .pBot .bot span{display:block;text-align:left}
 .pBot .bot.hecho small::after{content:" · visto";opacity:.75}
+/* (16-oct-2026) un día que aún no se ha visto en clase: apagado, con su candado y «se abre en clase» (window.CabHitos) */
+.pBot .bot.dia.cerrado,.pBot .bot.dia.cerrado:hover{opacity:.5;cursor:default;background:rgba(8,12,14,.6);border-color:var(--linea)}
+.pBot .bot.cerrado small::after{content:" · se abre en clase";opacity:.85}
+.pBot .bot b svg{width:.62em;height:.62em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+#lRejilla .lCerrados{grid-column:1/-1;margin:6px 0 0;font-weight:300;font-size:17px;letter-spacing:.06em;opacity:.75}
 .pBot p{margin:0;display:flex;gap:16px;align-items:center}
 .pBot p span{opacity:.5}
 
@@ -1304,9 +1346,21 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
   function pintaPortada() {
     var E = Estado.e;
     $$('#portada .dia').forEach(function (b) { b.classList.toggle('hecho', !!E.vistos[b.getAttribute('data-dia')]); });
-    var c = $('#bContinuar'), hay = !!(E.prog && DATOS.dias[E.prog.dia] && E.prog.paso > 0);
+    var c = $('#bContinuar'), hay = !!(E.prog && DATOS.dias[E.prog.dia] && E.prog.paso > 0 && diaAbierto(E.prog.dia));   /* (16-oct-2026) y abierto */
     c.hidden = !hay; $('#pSep').hidden = !hay;
     if (hay) c.textContent = 'Continuar el Día ' + E.prog.dia;
+    candados();
+  }
+  /* (16-oct-2026, Iago) «que no te deje ir al día 3 porque todavía no lo desbloqueé»: los días que aún no se han visto en
+     clase, cerrados (window.CabHitos, en la cabecera; sin él, todo abierto como siempre) */
+  function diaAbierto(d) { try { return !window.CabHitos || window.CabHitos.abierto(d); } catch (e) { return true; } }
+  function candados() {
+    $$('#portada .dia').forEach(function (b) {
+      var ok = diaAbierto(+b.getAttribute('data-dia')), f = b.querySelector('b');
+      b.classList.toggle('cerrado', !ok); b.disabled = !ok;
+      if (ok) b.removeAttribute('title'); else b.title = 'Se abre al acabar la clase en la que lo veamos';
+      if (f) f.innerHTML = ok ? '›' : '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+    });
   }
   function portada() {
     corte.v++; enPortada = true; document.body.classList.remove('historia'); document.body.classList.remove('teclas');
@@ -1328,11 +1382,12 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     avisoSonido();
   }
   function avisoSonido() { var a = $('#pSon'); if (a) a.hidden = Sonido.suena() || !Carga.rec('a:cama_valle'); }
-  function entra(d, desde) {
+  function entra(d, desde, forzar) {
+    if (!diaAbierto(d)) { pintaPortada(); return; }       /* (16-oct-2026) un día que aún no se ha visto en clase */
     var D = DATOS.dias[d], est = estanciaDe(D, desde || 0);
     Sonido.arranca();
     $('#portada').classList.add('fuera'); enPortada = false;
-    pantallaCargaSiHace(est.claves, { ceja: 'Día ' + d + ' · ' + D.titulo, titulo: 'Preparando el Día ' + d, boton: 'Empezar', micro: d < 3 }).then(function () {
+    pantallaCargaSiHace(est.claves, { ceja: 'Día ' + d + ' · ' + D.titulo, titulo: 'Preparando el Día ' + d, boton: 'Empezar', micro: d < 3 }, forzar).then(function () {
       $('#fps').hidden = true; UI.salir(true); enPortada = false; document.body.classList.add('historia');
       Vivo.limpia(); Camas.dia(D);      // desde aquí, la música y los ambientes siguen las curvas de este día (el valle de la portada no se corta: la historia arranca desde él)
       return correDia(d, desde || 0);
@@ -1342,15 +1397,15 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
       return UI.negro(1, 0.2).then(function () { return portada(); });
     }).catch(function (e) { if (!(e && e.message === 'volver')) console.error(e); portada(); });
   }
-  function pantallaCargaSiHace(lista, o) {
+  function pantallaCargaSiHace(lista, o, forzar) {
     lista = lista.filter(function (k) { return Carga.rec(k); });
-    if (Carga.progreso(lista).listo && (!o.micro || Micro.hay() || Micro.estado() === 'no')) return Promise.resolve();
+    if (!forzar && Carga.progreso(lista).listo && (!o.micro || Micro.hay() || Micro.estado() === 'no')) return Promise.resolve();
     return pantallaCarga(lista, o);
   }
   function lugares() {
     var caja = $('#lRejilla'), lu = $('#lugares'); caja.innerHTML = '';
     var porDia = {};
-    ORDEN_EST.forEach(function (id) { var e = EST[id]; if (e.oculta) return; (porDia[e.dia] = porDia[e.dia] || []).push(e); });
+    ORDEN_EST.forEach(function (id) { var e = EST[id]; if (e.oculta || !diaAbierto(e.dia)) return; (porDia[e.dia] = porDia[e.dia] || []).push(e); });   /* (16-oct-2026) solo lo de los días abiertos */
     Object.keys(porDia).sort().forEach(function (d) {
       caja.appendChild(el('h4', '', DATOS.dias[d] ? 'Día ' + d + ' · ' + DATOS.dias[d].titulo : 'Repaso'));
       porDia[d].forEach(function (e) {
@@ -1359,10 +1414,13 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
         caja.appendChild(b);
       });
     });
+    var cer = window.CabHitos ? window.CabHitos.cerrados() : [];   /* (16-oct-2026) */
+    if (cer.length) caja.appendChild(el('p', 'lCerrados', cer.length > 1 ? 'Los días ' + cer.join(' y ') + ' se abrirán cuando los veamos en clase.' : 'El Día ' + cer[0] + ' se abrirá cuando lo veamos en clase.'));
     $('#portada').classList.add('fuera'); lu.classList.add('on'); $('#fps').hidden = true; enPortada = true;      // la lista va sobre la fachada: si su bucle llega ahora, que arranque
     $('#lVolver').onclick = function () { lu.classList.remove('on'); portada(); };
   }
   function abreLugar(id) {
+    if (EST[id] && !diaAbierto(EST[id].dia)) { lugares(); return; }   /* (16-oct-2026) */
     var def = EST[id], lu = $('#lugares'), mio = ++corte.v;
     Sonido.arranca(); lu.classList.remove('on'); $('#portada').classList.add('fuera'); $('#fps').hidden = true; enPortada = false;
     var antes = def.micro && !Micro.hay() && Micro.estado() !== 'no' ? Micro.pide() : Promise.resolve();
@@ -1413,6 +1471,10 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
       }, 100);
       var q = QS.get('ir');                                            // (para probar) ?ir=2.5 entra en el paso 5 del Día 2; ?ir=sinte abre una estación
       if (q) { setTimeout(function () { if (EST[q]) abreLugar(q); else { var a = q.split('.'); entra(+a[0], +(a[1] || 0)); } }, 300); }
+      else {   /* (16-oct-2026) «un botón que ponga ir a ver… que te vaya directamente al día» */
+        var dl = 0; try { dl = window.CabHitos ? window.CabHitos.ir() : 0; } catch (x) {}
+        if (dl && DATOS.dias[dl] && diaAbierto(dl)) setTimeout(function () { var p = Estado.e.prog; entra(dl, (p && p.dia === dl && p.paso > 0) ? vuelveA(DATOS.dias[dl], p.paso) : 0, true); }, 300);
+      }
     }).catch(function (e) { console.error(e); UI.aviso('No se pudo cargar: recarga la página'); });
   }
   /* «Continuar»: se vuelve al principio del tramo en el que se estaba (o al de antes, si se estaba en una espera o una estación) */
