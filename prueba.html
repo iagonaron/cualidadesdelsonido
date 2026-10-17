@@ -1354,6 +1354,18 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
   /* (16-oct-2026, Iago) «que no te deje ir al día 3 porque todavía no lo desbloqueé»: los días que aún no se han visto en
      clase, cerrados (window.CabHitos, en la cabecera; sin él, todo abierto como siempre) */
   function diaAbierto(d) { try { return !window.CabHitos || window.CabHitos.abierto(d); } catch (e) { return true; } }
+  /* (17-oct-2026, Iago) «que la notificación que me llegue tenga la textura de la cabaña… del día y todo» · «tantas tarjetas como
+     días, cada una con su textura»: el latido (piel/latido.js, la línea del final) apunta cada minuto lo que pone aquí
+     (data-lm-ejercicio): «dia-N» mientras se ve la historia del Día N, «dia-N-paradas» en una parada suelta de ese día (La cabaña
+     abierta) y «repaso» en el test. En la portada y en las listas, nada (ese rato cuenta en el total, sin día). Para quitarlo:
+     borrar esta función y sus llamadas marcaLatido(…). */
+  function marcaLatido(k) {
+    try {
+      var m = document.getElementById('lm-que');
+      if (!m) { m = document.createElement('i'); m.id = 'lm-que'; m.hidden = true; document.body.appendChild(m); }
+      if (m.getAttribute('data-lm-ejercicio') !== (k || '')) m.setAttribute('data-lm-ejercicio', k || '');
+    } catch (e) {}
+  }
   function candados() {
     $$('#portada .dia').forEach(function (b) {
       var ok = diaAbierto(+b.getAttribute('data-dia')), f = b.querySelector('b');
@@ -1363,7 +1375,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     });
   }
   function portada() {
-    corte.v++; enPortada = true; document.body.classList.remove('historia'); document.body.classList.remove('teclas');
+    marcaLatido(''); corte.v++; enPortada = true; document.body.classList.remove('historia'); document.body.classList.remove('teclas');
     if (boton) { boton.quita(); boton = null; }
     Video.para(0.4); if (Sonido.ctx()) Sonido.silencio(0.8);
     Vivo.limpia(); $('#cartel').classList.remove('on'); $('#lugares').classList.remove('on');
@@ -1388,7 +1400,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     Sonido.arranca();
     $('#portada').classList.add('fuera'); enPortada = false;
     pantallaCargaSiHace(est.claves, { ceja: 'Día ' + d + ' · ' + D.titulo, titulo: 'Preparando el Día ' + d, boton: 'Empezar', micro: d < 3 }, forzar).then(function () {
-      $('#fps').hidden = true; UI.salir(true); enPortada = false; document.body.classList.add('historia');
+      $('#fps').hidden = true; UI.salir(true); enPortada = false; document.body.classList.add('historia'); marcaLatido('dia-' + d);
       Vivo.limpia(); Camas.dia(D);      // desde aquí, la música y los ambientes siguen las curvas de este día (el valle de la portada no se corta: la historia arranca desde él)
       return correDia(d, desde || 0);
     }).then(function (r) {
@@ -1403,6 +1415,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     return pantallaCarga(lista, o);
   }
   function lugares() {
+    marcaLatido('');
     var caja = $('#lRejilla'), lu = $('#lugares'); caja.innerHTML = '';
     var porDia = {};
     ORDEN_EST.forEach(function (id) { var e = EST[id]; if (e.oculta || !diaAbierto(e.dia)) return; (porDia[e.dia] = porDia[e.dia] || []).push(e); });   /* (16-oct-2026) solo lo de los días abiertos */
@@ -1426,6 +1439,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     var antes = def.micro && !Micro.hay() && Micro.estado() !== 'no' ? Micro.pide() : Promise.resolve();
     antes.then(function () { return asegura(recursosEst(id), { ceja: 'La cabaña abierta', titulo: 'Preparando ' + def.corto, boton: 'Entrar' }); }).then(function () {
       enPortada = false; UI.salir(true);
+      marcaLatido(DATOS.dias[def.dia] ? 'dia-' + def.dia + '-paradas' : 'repaso');
       return Estacion.abre(id, { modo: 'libre' });
     }).then(function () { if (mio !== corte.v) return; UI.salir(false); Camas.portada(); return fondoPortada(0.5).then(function () { lugares(); }); })
       .catch(function (e) { if (!(e && e.message === 'volver')) console.error(e); if (mio === corte.v) { fondoPortada(0.4); lugares(); } });
