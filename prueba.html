@@ -1358,7 +1358,10 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
      días, cada una con su textura»: el latido (piel/latido.js, la línea del final) apunta cada minuto lo que pone aquí
      (data-lm-ejercicio): «dia-N» mientras se ve la historia del Día N, «dia-N-paradas» en una parada suelta de ese día (La cabaña
      abierta) y «repaso» en el test. En la portada y en las listas, nada (ese rato cuenta en el total, sin día). Para quitarlo:
-     borrar esta función y sus llamadas marcaLatido(…). */
+     borrar esta función y sus llamadas marcaLatido(…).
+     (20-oct-2026, Iago: «me gustaría saber qué día es el que ha abierto») también «portada», «lugares» (la lista de La cabaña
+     abierta) y «dia-N-carga» (en «Preparando el Día N», hasta que empieza): así el Diario dice dónde estuvo, y no pone el Día 1
+     cuando no hubo ningún día. Para volver a lo de antes: esas tres marcas a '' (portada(), lugares() e inicia()) y quitar la de entra(). */
   function marcaLatido(k) {
     try {
       var m = document.getElementById('lm-que');
@@ -1375,7 +1378,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     });
   }
   function portada() {
-    marcaLatido(''); corte.v++; enPortada = true; document.body.classList.remove('historia'); document.body.classList.remove('teclas');
+    marcaLatido('portada'); corte.v++; enPortada = true; document.body.classList.remove('historia'); document.body.classList.remove('teclas');
     if (boton) { boton.quita(); boton = null; }
     Video.para(0.4); if (Sonido.ctx()) Sonido.silencio(0.8);
     Vivo.limpia(); $('#cartel').classList.remove('on'); $('#lugares').classList.remove('on');
@@ -1399,6 +1402,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     var D = DATOS.dias[d], est = estanciaDe(D, desde || 0);
     Sonido.arranca();
     $('#portada').classList.add('fuera'); enPortada = false;
+    marcaLatido('dia-' + d + '-carga');   /* (20-oct-2026) en «Preparando el Día N»: el día que abrió, aunque no llegue a empezar */
     pantallaCargaSiHace(est.claves, { ceja: 'Día ' + d + ' · ' + D.titulo, titulo: 'Preparando el Día ' + d, boton: 'Empezar', micro: d < 3 }, forzar).then(function () {
       $('#fps').hidden = true; UI.salir(true); enPortada = false; document.body.classList.add('historia'); marcaLatido('dia-' + d);
       Vivo.limpia(); Camas.dia(D);      // desde aquí, la música y los ambientes siguen las curvas de este día (el valle de la portada no se corta: la historia arranca desde él)
@@ -1415,7 +1419,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     return pantallaCarga(lista, o);
   }
   function lugares() {
-    marcaLatido('');
+    marcaLatido('lugares');
     var caja = $('#lRejilla'), lu = $('#lugares'); caja.innerHTML = '';
     var porDia = {};
     ORDEN_EST.forEach(function (id) { var e = EST[id]; if (e.oculta || !diaAbierto(e.dia)) return; (porDia[e.dia] = porDia[e.dia] || []).push(e); });   /* (16-oct-2026) solo lo de los días abiertos */
@@ -1463,7 +1467,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     $('#bLugares').addEventListener('click', lugares);
     $('#bSalir').addEventListener('click', function () { portada(); });
     ['pointerdown', 'keydown', 'touchend'].forEach(function (ev) { document.addEventListener(ev, despierta, true); });
-    pintaPortada();
+    pintaPortada(); marcaLatido('portada');   /* (20-oct-2026) al llegar, la portada */
     Carga.manifiesto().then(function (m) {
       if (m.sin30) $('#fps').hidden = true;
       Carga.pide(['i:' + FONDO_PORTADA], true);
