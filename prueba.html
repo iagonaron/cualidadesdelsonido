@@ -225,10 +225,13 @@ input[type=range]::-webkit-slider-runnable-track{height:2px;background:rgba(255,
 input[type=range]::-moz-range-track{height:2px;background:rgba(255,255,255,.7)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;margin-top:-12px;box-shadow:0 0 12px rgba(0,0,0,.5)}
 input[type=range]::-moz-range-thumb{width:26px;height:26px;border:0;border-radius:50%;background:#fff}
-input[type=range].vert{writing-mode:vertical-lr;direction:rtl;width:44px;height:236px}
-input[type=range].vert::-webkit-slider-runnable-track{width:2px;height:100%}
-input[type=range].vert::-moz-range-track{width:2px;height:100%}
-input[type=range].vert::-webkit-slider-thumb{margin-top:0;margin-right:-12px}
+/* (22-oct-2026) deslizador vertical hecho a mano (los armónicos del sintetizador): el range en vertical salía con el botón descentrado y no iba igual en todos los navegadores */
+.dV{position:relative;width:44px;flex:none;cursor:pointer;touch-action:none;outline:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.dV>i,.dV>u{position:absolute;left:21px;width:2px;bottom:13px;background:rgba(255,255,255,.3);pointer-events:none}
+.dV>i{top:13px}
+.dV>u{background:rgba(255,255,255,.92)}
+.dV>b{position:absolute;left:9px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 12px rgba(0,0,0,.5);pointer-events:none}
+.dV:focus-visible>b,.dV.on>b{box-shadow:0 0 0 3px var(--ambar),0 0 12px rgba(0,0,0,.5)}
 .acierto{color:var(--verde)}.fallo{color:#ff9d8a}
 
 /* ── la cabaña abierta (lugares) */
@@ -1539,6 +1542,36 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
     r.addEventListener('keydown', function (e) { e.stopPropagation(); });
     return r;
   };
+  /* (22-oct-2026) Deslizador VERTICAL hecho a mano. El <input type=range> puesto en vertical no se ve ni se comporta igual en todos los
+     navegadores (en el sintetizador el botón salía fuera de su raya) y, al pulsarlo, se quedaba con el foco y se tragaba las teclas del
+     teclado del ordenador, así que el piano dejaba de sonar. Este va con ratón, dedo o lápiz (lee bien la escala de #marco), no roba el
+     foco al pulsarlo y, si se llega a él con el tabulador, se mueve con las flechas. Tiene .value, como un input.
+     o: {min, max, valor, alto, alMover(v), alPulsar(), alSoltar()} */
+  E.deslizaV = function (o) {
+    var min = o.min || 0, max = o.max == null ? 1 : o.max, v = +o.valor || 0, alto = o.alto || 236, B = 26, punt = null;
+    var r = el('div', 'dV', '<i></i><u></u><b></b>'), rel = r.children[1], bot = r.children[2];
+    r.style.height = alto + 'px'; r.tabIndex = 0; r.setAttribute('role', 'slider'); r.setAttribute('aria-orientation', 'vertical');
+    r.setAttribute('aria-valuemin', min); r.setAttribute('aria-valuemax', max);
+    function pinta() { var y = ((v - min) / (max - min) || 0) * (alto - B); bot.style.bottom = y + 'px'; rel.style.height = y + 'px'; r.setAttribute('aria-valuenow', v.toFixed(2)); }
+    function pon(nv, avisa) { nv = Math.max(min, Math.min(max, nv)); if (nv === v) return; v = nv; pinta(); if (avisa && o.alMover) o.alMover(v); }
+    function desdeY(e) { var b = r.getBoundingClientRect(), k = b.height / alto; pon(min + (max - min) * (b.bottom - B / 2 * k - e.clientY) / ((alto - B) * k), true); }
+    r.addEventListener('pointerdown', function (e) {
+      if (punt != null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      e.preventDefault(); punt = e.pointerId; try { r.setPointerCapture(punt); } catch (x) {}
+      r.classList.add('on'); if (o.alPulsar) o.alPulsar(); desdeY(e);
+    });
+    r.addEventListener('pointermove', function (e) { if (e.pointerId === punt) desdeY(e); });
+    function fin(e) { if (e.pointerId !== punt) return; punt = null; r.classList.remove('on'); if (o.alSoltar) o.alSoltar(); }
+    r.addEventListener('pointerup', fin); r.addEventListener('pointercancel', fin); r.addEventListener('lostpointercapture', fin);
+    r.addEventListener('keydown', function (e) {
+      var d = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1, PageUp: 4, PageDown: -4 }[e.key];
+      if (e.key === 'Home') pon(min, true); else if (e.key === 'End') pon(max, true); else if (d) pon(v + d * (max - min) / 20, true); else return;
+      e.preventDefault(); e.stopPropagation();
+    });
+    Object.defineProperty(r, 'value', { get: function () { return v; }, set: function (nv) { pon(+nv || 0, false); } });
+    pinta();
+    return r;
+  };
   E.nota = function (hz) {            // nombre de la nota más cercana (La 4 = 440 Hz) y cuánto se aparta, en centésimas de semitono
     var n = 69 + 12 * Math.log(hz / 440) / Math.LN2, m = Math.round(n), N = ['Do', 'Do♯', 'Re', 'Re♯', 'Mi', 'Fa', 'Fa♯', 'Sol', 'Sol♯', 'La', 'La♯', 'Si'];
     return { midi: m, nombre: N[((m % 12) + 12) % 12] + ' ' + (Math.floor(m / 12) - 1), cents: Math.round((n - m) * 100) };
@@ -2614,6 +2647,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
       function hazOnda() {
         var re = new Float32Array(9), im = new Float32Array(9), s = 0; for (var k = 0; k < 8; k++) { im[k + 1] = arm[k]; s += arm[k]; }
         if (s < 0.001) im[1] = 0.0001;
+        sal.gain.setTargetAtTime(s < 0.001 ? 0 : 0.9, c.currentTime, 0.02);   /* (22-oct-2026) sin ningún armónico no suena nada (antes, lo que ya sonaba se quedaba como sonido puro) */
         onda = c.createPeriodicWave(re, im); Object.keys(voces).forEach(function (m) { try { voces[m].o.setPeriodicWave(onda); } catch (x) {} });
         dibuja();
       }
@@ -2630,13 +2664,18 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
         var n = cuando || c.currentTime; v.g.gain.cancelScheduledValues(n); if (!cuando) v.g.gain.setValueAtTime(v.g.gain.value, n);
         v.g.gain.setTargetAtTime(0, n, Math.max(0.012, cai / 4)); try { v.o.stop(n + cai * 1.6 + 0.1); } catch (x) {}
       }
+      /* (22-oct-2026) mientras se arrastra un armónico suena una nota (la última del teclado o, si no, el La 3 de los botones de arriba): así se oye
+         cómo cambia el timbre al moverlos. Antes los deslizadores solo cambiaban el dibujo y no se oía nada hasta tocar el teclado. */
+      var ultHz = 220, mano = 0;
+      function oyeSi() { if (mano++ === 0) toca('oye', ultHz); }
+      function oyeNo() { if (mano > 0 && --mano === 0 && voces.oye) { suelta(voces.oye); delete voces.oye; } }
       /* 1 · los armónicos */
       var p1 = E.caja(api.raiz, 'left:100px;top:236px;width:690px;height:446px;padding:20px 28px', 'panel');
       E.txt(p1, 'paso', '<b>1</b>Suma armónicos');
       var fd = E.txt(p1, 'fila', '', 'gap:0;justify-content:space-between;margin:10px 6px 0;align-items:flex-start');
       arm.forEach(function (a, k) {
         var col = E.txt(fd, 'col', '', 'align-items:center;gap:6px;width:60px');
-        var r = E.desliza({ min: 0, max: 1, valor: a, alMover: function (v) { arm[k] = v; hazOnda(); } }); r.className = 'vert'; r.setAttribute('orient', 'vertical'); col.appendChild(r);
+        var r = E.deslizaV({ min: 0, max: 1, valor: a, alMover: function (v) { arm[k] = v; hazOnda(); }, alPulsar: oyeSi, alSoltar: oyeNo }); r.setAttribute('aria-label', k === 0 ? 'Fundamental' : 'Armónico ' + (k + 1)); col.appendChild(r);
         E.txt(col, '', String(k + 1), 'font-size:22px;font-weight:300'); E.txt(col, '', k === 0 ? 'fundamental' : '× ' + (k + 1), 'font-size:13px;opacity:.7;letter-spacing:.04em;white-space:nowrap'); desl.push(r);
       });
       var pre = E.txt(p1, 'fila', '', 'justify-content:flex-start;gap:9px;margin-top:14px');
@@ -2646,7 +2685,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
       var p2 = E.caja(api.raiz, 'left:820px;top:236px;width:470px;height:446px;padding:20px 28px', 'panel');
       E.txt(p2, 'paso', '<b>2</b>Dale forma');
       var cvE = el('canvas'); cvE.width = 414; cvE.height = 130; cvE.style.cssText = 'display:block;margin:12px 0 4px;width:414px;height:130px'; p2.appendChild(cvE);
-      function lineaDes(txt, v0, alMover) { var f = E.txt(p2, 'fila', '<span style="width:150px;text-align:left;font-size:17px;letter-spacing:.14em;text-transform:uppercase">' + txt + '</span>', 'justify-content:flex-start;gap:10px'); var r = E.desliza({ min: 0, max: 1, valor: v0, ancho: 250, alMover: alMover }); f.appendChild(r); return r; }
+      function lineaDes(txt, v0, alMover) { var f = E.txt(p2, 'fila', '<span style="width:150px;text-align:left;font-size:17px;letter-spacing:.14em;text-transform:uppercase">' + txt + '</span>', 'justify-content:flex-start;gap:10px'); var r = E.desliza({ min: 0, max: 1, valor: v0, ancho: 250, alMover: alMover }); r.addEventListener('pointerup', function () { setTimeout(function () { r.blur(); }, 0); }); f.appendChild(r); return r; }   /* (22-oct-2026) al soltarlo, devuelve el foco: si no, se tragaba las teclas del teclado */
       lineaDes('Ataque', Math.log(atq / 0.005) / Math.log(160), function (v) { atq = 0.005 * Math.pow(160, v); dibuja(); });
       lineaDes('Caída', Math.log(cai / 0.05) / Math.log(60), function (v) { cai = 0.05 * Math.pow(60, v); dibuja(); });
       var fF = E.txt(p2, 'fila', '', 'justify-content:flex-start;gap:9px;margin-top:6px');
@@ -2672,7 +2711,7 @@ input[type=range].tCam::-webkit-slider-thumb{width:30px;height:30px;margin-top:-
         var y0 = top + (b - top) * 0.2; for (x = xs; x <= w; x += 2) ce.lineTo(x, b - (b - y0) * Math.exp(-(x - xs) / w * T / (cai / 4)));
         ce.stroke(); ce.fillStyle = 'rgba(255,255,255,.6)'; ce.font = '300 14px Jost, sans-serif'; ce.fillText('pulsas', 2, 14 + 0); ce.fillText('sueltas', xs - 20, b - (b - y0) - 8);
       }
-      var tec = E.teclado(api.raiz, { x: 260, y: 716, w: 1400, h: 240, desde: 48, hasta: 72, tocar: function (m) { toca(m); }, soltar: function (m) { if (voces[m]) { suelta(voces[m]); delete voces[m]; } } });
+      var tec = E.teclado(api.raiz, { x: 260, y: 716, w: 1400, h: 240, desde: 48, hasta: 72, tocar: function (m) { ultHz = E.hz(m); toca(m); }, soltar: function (m) { if (voces[m]) { suelta(voces[m]); delete voces[m]; } } });
       hazOnda();
       return function () { vivo = false; tec.quita(); Object.keys(voces).forEach(function (m) { suelta(voces[m]); }); setTimeout(function () { try { sal.disconnect(); } catch (x) {} }, 2500); };
     } });
