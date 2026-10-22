@@ -49,6 +49,8 @@
 window.LM_VOL_CONFIG = function () {
   return {
       portal: 'acustica', tema: 'radio',
+      // (22-oct-2026, v5) una animación por día: el 1, el árbol que cae al lago; el 2, la radio; el 3, el sintetizador modular
+      temaDe: function () { try { var m = /D[ií]a\s*(\d)/i.exec((document.querySelector('#carga .ceja') || {}).textContent || ''); return m ? ({ 1: 'arbol', 2: 'radio', 3: 'sinte' })[m[1]] || 'radio' : 'radio'; } catch (x) { return 'radio'; } },
       boton: { padre: '#mandos', antes: '#bPausa', despues: true, clase: 'bot', id: 'bVoluntarios' },
       // si un tramo de la historia está corriendo, se pone en pausa (al cerrar la ruleta, «Seguir» como siempre)
       alAbrir: function () { try { var p = document.getElementById('bPausa'); if (p && p.classList.contains('hay') && !document.body.classList.contains('pausa')) p.click(); } catch (x) {} }
